@@ -4,15 +4,16 @@
   "private": true,
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
+    "build": "npm run sync:avatars && nuxt build",
+    "dev": "npm run sync:avatars && nuxt dev",
+    "generate": "npm run sync:avatars && nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxi typecheck",
-    "i18n:check": "vue-i18n-extract",
+    "i18n:check": "node scripts/check-i18n.mjs",
     "format:check": "prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "sync:avatars": "node scripts/sync-discord-avatars.mjs"
   },
   "dependencies": {
     "@nuxtjs/i18n": "^10.2.4",

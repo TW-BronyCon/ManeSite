@@ -107,6 +107,12 @@
     "navLabel": "主導航",
     "home": "首頁",
     "about": "關於我們",
+    "aboutSub": {
+      "mascot": "大會吉祥物",
+      "crew": "籌備團隊",
+      "coc": "行為準則",
+      "contact": "聯絡我們"
+    },
     "news": "最新消息",
     "ticket": "購票資訊",
     "apply": "活動申請",
@@ -273,5 +279,49 @@
     "viewSchedule": "查看時程表",
     "viewOnMap": "查看地圖",
     "viewOnMapTooltip": "在互動地圖中查看此區域"
+  },
+
+  "mascotPage": {
+    "title": "大會吉祥物",
+    "subtitle": "Taiwan BronyCon 官方形象角色介紹",
+    "conceptTitle": "角色設計概念",
+    "conceptDesc": "我們的吉祥物象徵著台灣馬迷社群的創造力、多元包容與友誼熱情。從服裝細節到色彩搭配，無不展現出深厚的馬圈文化與在地連結。",
+    "loreTitle": "背景故事與性格",
+    "loreDesc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 陪伴每位參加者探索活動現場，帶領大家感受「友誼就是魔法」的奇幻氛圍。",
+    "paletteTitle": "代表色彩"
+  },
+
+  "crewPage": {
+    "title": "籌備團隊",
+    "subtitle": "感謝所有為TWBC無私奉獻的志工與工作人員",
+    "intro": "TWBC由一群熱愛My Little Pony彩虹小馬的馬迷志工共同籌備與營運。成員們分工合作，從活動企劃、美術視覺、資訊技術到現場物資，齊心打造屬於馬迷的夢幻盛會。"
+  },
+
+  "cocPage": {
+    "title": "行為準則",
+    "subtitle": "Taiwan BronyCon 會場安全與社群規範（Code of Conduct）",
+    "notice": "請所有參加者、創作者與工作人員共同遵守以下規範，確保每個人都能在安全、友善且互相信任的環境中享受盛會。"
+  },
+
+  "contactPage": {
+    "title": "聯絡我們",
+    "subtitle": "有任何問題或建議？歡迎隨時與TWBC籌備團隊聯繫！",
+    "socialTitle": "官方社群頻道",
+    "socialDesc": "歡迎追蹤我們的官方社群頻道以獲取最新動態，或透過電子郵件與我們聯繫。",
+    "emailTitle": "電子郵件聯絡",
+    "emailDesc": "如有任何活動問題、創作者諮詢或合作需求，歡迎直接寄信至官方信箱。",
+    "officialEmail": "官方電子郵件",
+    "copyEmail": "複製信箱地址",
+    "emailCopied": "已複製！",
+    "sendMail": "寄信",
+    "inquiryTopicsTitle": "建議郵件主旨標籤",
+    "inquiryTopicsDesc": "寄信時可在主旨中標註主題標籤，將有助於籌備組更快速處理您的信件：",
+    "categories": {
+      "general": "一般活動諮詢",
+      "vendor": "攤位與創作者諮詢",
+      "volunteer": "志工與工作人員諮詢",
+      "media": "媒體與合作邀約",
+      "other": "其他事項"
+    }
   }
 }

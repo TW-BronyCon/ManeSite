@@ -1,0 +1,46 @@
+[
+  {
+    "groupName": {
+      "zh": "主辦團隊",
+      "en": "Organizing Team"
+    },
+    "members": [
+      {
+        "nameHint": "Jerro",
+        "discordId": "359259774371627008"
+      },
+      {
+        "nameHint": "Needle",
+        "discordId": "376889051191574529"
+      },
+      {
+        "nameHint": "Bradly",
+        "discordId": "494796055439867905"
+      }
+    ]
+  },
+  {
+    "groupName": {
+      "zh": "資訊與網頁開發",
+      "en": "IT & Web Development"
+    },
+    "members": [
+      {
+        "nameHint": "Bradly",
+        "discordId": "494796055439867905"
+      },
+      {
+        "nameHint": "Rhyme",
+        "discordId": "508952917244641280"
+      }
+    ]
+  },
+  {
+    "groupName": {
+      "zh": "現場志工",
+      "en": "Volunteers"
+    },
+    "roleId": "1476911570935087265",
+    "members": []
+  }
+]

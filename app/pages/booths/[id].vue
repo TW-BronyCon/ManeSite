@@ -216,7 +216,7 @@ useSeoMeta({
             >
               <i class="fa-solid fa-xmark"></i>
             </button>
-            <div class="lightbox-content" @click.stop>
+            <div class="lightbox-content">
               <img
                 :src="currentImage"
                 :alt="booth ? booth.name[isEn ? 'en' : 'zh'] : ''"
@@ -477,6 +477,7 @@ useSeoMeta({
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: zoom-out;
 }
 
 .lightbox-img {
@@ -488,7 +489,7 @@ useSeoMeta({
   border-radius: 8px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 230, 167, 0.15);
-  cursor: default;
+  cursor: zoom-out;
   transition: transform 0.3s ease;
 }
 
