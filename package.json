@@ -9,7 +9,7 @@
     "generate": "npm run sync:avatars && nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "typecheck": "nuxi typecheck",
+    "typecheck": "npm run sync:avatars && nuxi typecheck",
     "i18n:check": "node scripts/check-i18n.mjs",
     "format:check": "prettier --check .",
     "format": "prettier --write .",

@@ -30,6 +30,9 @@ jobs:
         run: npm run i18n:check
 
       - name: Run Typecheck
+        env:
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
         run: npm run typecheck
 
       - name: Build Project
