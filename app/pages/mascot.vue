@@ -83,10 +83,6 @@ useSeoMeta({
               width="8156"
               height="7067"
             />
-            <div class="zoom-overlay">
-              <i class="fa-solid fa-magnifying-glass-plus icon"></i>
-              <span>{{ t("common.zoomImage") }}</span>
-            </div>
           </div>
         </div>
 
@@ -193,7 +189,7 @@ useSeoMeta({
 }
 
 .mascot-frame.clickable {
-  cursor: pointer;
+  cursor: zoom-in;
 }
 
 .mascot-img {
@@ -214,28 +210,6 @@ useSeoMeta({
     height: auto;
     max-width: 380px;
   }
-}
-
-.zoom-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(20, 10, 30, 0.65);
-  backdrop-filter: blur(4px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  color: var(--color-gold);
-  font-weight: bold;
-  font-size: 1rem;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 2;
-}
-
-.zoom-overlay .icon {
-  font-size: 2rem;
 }
 
 .mascot-frame:hover .zoom-overlay,

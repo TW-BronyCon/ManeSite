@@ -1,49 +1,49 @@
-# Taiwan BronyCon Code of Conduct
+# Taiwan BronyCon 會場行為準則（Code of Conduct）
 
-Welcome to **Taiwan BronyCon (TWBC)**! To ensure that all attendees, creators, volunteers, and staff can enjoy the event in a safe, friendly, respectful, and inclusive environment, please follow our Code of Conduct.
-
----
-
-## 1. Core Spirit
-
-- **Friendship is Magic**: We expect every attendee to interact with fellow fans with kindness, enthusiasm, and mutual respect.
-- **Inclusivity & Respect**: Regardless of age, gender, sexual orientation, appearance, race, or religion, TWBC strictly prohibits any form of discrimination or bullying.
+歡迎來到**Taiwan BronyCon（TWBC）**！為確保所有參加者、創作者、志工與工作人員都能在安全、友善、互相尊重且包容的環境中享受盛會，請共同遵守以下行為準則。
 
 ---
 
-## 2. Venue Guidelines
+## 1. 核心精神
 
-### A. Mutual Respect & Social Etiquette
-
-- Please remain polite when interacting with others, requesting photos, or engaging in conversation.
-- **No Means Stop**: If someone expresses discomfort or explicitly declines an interaction, please stop immediately.
-
-### B. Cosplay & Costume Policy
-
-- Cosplayers are welcome to showcase their creativity! Costumes must be safe and provide appropriate coverage, avoiding overly revealing or offensive designs.
-- Prop weapons must comply with venue safety standards. Items with actual lethal force, sharp edges, or projectile/firing mechanisms are strictly forbidden.
-
-### C. Photography & Videography
-
-- Before taking photos or videos of others (especially cosplayers or booth creators), **always ask for their consent first**.
-- Commercial photography or live streaming is prohibited without prior authorization.
+- **友誼就是魔法**：我們期待每位參加者都能以友善、熱情與相互尊重的態度與同好交流。
+- **包容與尊重**：無論年齡、性別、性傾向、外貌、種族或宗教信仰，TWBC嚴禁任何形式的歧視、霸凌與騷擾。
 
 ---
 
-## 3. Prohibited Conduct
+## 2. 會場規範
 
-The following behaviors are strictly forbidden. Violators will face warnings, revocation of admission without refund, or referral to law enforcement:
+### A. 社交禮儀與互相尊重
 
-1. **Harassment & Bullying**: Including verbal abuse, physical harassment, stalking, or unwanted physical contact.
-2. **Property & Environmental Damage**: Littering, damaging venue facilities, or posting unauthorized posters/flyers.
-3. **Hazardous Items**: Bringing illegal substances, controlled drugs, flammable/explosive materials, or real weapons into the venue.
-4. **Unauthorized Sales**: Commercial sales or aggressive promotion by unregistered individuals are strictly prohibited.
+- 在與他人互動、合照或交談時，請保持禮貌與尊重。
+- **尊重拒絕（No means Stop）**：若他人表達不適或明確拒絕互動，請立即停止該行為。
+
+### B. Cosplay與裝扮規範
+
+- 歡迎Cosplayer展現創意！服裝需注意安全並保持適當遮蔽，避免過度暴露或具有攻擊性的設計。
+- 道具武器須符合場地安全標準，嚴禁攜帶具實際殺傷力、鋒利邊緣或具發射能力的物品入場。
+
+### C. 攝影與錄影規範
+
+- 拍攝他人（特別是Cosplayer或攤位創作者）前，**請務必先徵得對方同意**。
+- 未經大會事前授權，禁止進行商業攝影、直播或採訪行為。
 
 ---
 
-## 4. Reporting & Enforcement
+## 3. 禁止行為
 
-- If you experience harassment, feel uncomfortable, or witness any violations at the venue, please immediately seek help from **TWBC staff members wearing badges** or visit the Information Desk.
-- The TWBC organizing committee reserves the right to issue verbal warnings, escort individuals off the premises without refund, or contact law enforcement depending on the severity of the situation.
+會場內嚴禁以下行為，違者將面臨勸導警告、離場處理（不予退票）或移送警察機關辦理：
 
-Thank you for your cooperation and support in making Taiwan BronyCon a wonderful experience for everyone!
+1. **言語與身體騷擾**：包含言語辱罵、肢體騷擾、跟蹤或未經同意的身體接觸。
+2. **破壞設施與環境**：隨意丟棄垃圾、毀損場地設施或擅自張貼未授權的海報與傳單。
+3. **攜帶危險物品**：攜帶違禁品、管制藥物、易燃易爆物或具殺傷力之武器入場。
+4. **未授權商業行為**：未經報名核准之個人進行商業販售或強行推銷。
+
+---
+
+## 4. 違規通報與處置
+
+- 若您在會場遇到騷擾、感到不適或目擊任何違規事件，請立即向**佩戴識別證的TWBC工作人員**求助，或至大會服務台通報。
+- TWBC籌備委員會保留視情節輕重給予口頭警告、取消入場資格並勒令離場（不予退票），或通報警察機關之最終權利。
+
+感謝您的配合與支持，讓我們一起打造溫馨且美好的Taiwan BronyCon！
