@@ -2,9 +2,10 @@ import { createI18NReport } from "vue-i18n-extract";
 import * as config from "./vue-i18n-extract.config.js";
 
 try {
-  createI18NReport(config);
+  await createI18NReport(config);
   console.log("i18n check passed!");
 } catch (err) {
-  console.error("i18n check failed:", err.message);
+  const error = err instanceof Error ? err : new Error(String(err));
+  console.error("i18n check failed:", error.message);
   process.exit(1);
 }

@@ -18,7 +18,8 @@
     "footer": {
       "logoAlt": "TWBC Taiwan BronyCon Official Website",
       "copyright": "All Rights Reserved",
-      "copyrightNotice": "© 2026 TWBC"
+      "copyrightNotice": "© 2026 TWBC",
+      "email": "Email"
     },
     "about": {
       "title": "About Us",
@@ -288,13 +289,20 @@
     "conceptDesc": "Our mascot symbolizes the creativity, diversity, and spirit of friendship within the Taiwanese brony community. From costume details to color palette, every design element reflects local culture and passion for My Little Pony.",
     "loreTitle": "Backstory & Personality",
     "loreDesc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Guiding attendees through the convention and welcoming everyone to celebrate the magic of friendship.",
-    "paletteTitle": "Color Palette"
+    "paletteTitle": "Color Palette",
+    "colors": {
+      "newPink": "New Pink",
+      "mattePlum": "Matte Plum",
+      "premiumBlue": "Premium Blue",
+      "wellRead": "Well Read"
+    }
   },
 
   "crewPage": {
     "title": "Crew & Team",
     "subtitle": "Special thanks to all volunteers and team members behind TWBC",
-    "intro": "TWBC is organized and operated by passionate brony volunteers. Team members collaborate across event planning, visual design, tech infrastructure, and venue operations to bring this event to life."
+    "intro": "TWBC is organized and operated by passionate brony volunteers. Team members collaborate across event planning, visual design, tech infrastructure, and venue operations to bring this event to life.",
+    "memberAlt": "Member"
   },
 
   "cocPage": {
@@ -316,6 +324,7 @@
     "sendMail": "Send Email",
     "inquiryTopicsTitle": "Recommended Email Subject Tags",
     "inquiryTopicsDesc": "Including a category tag in your email subject helps us respond faster:",
+    "prefilledSubject": "Prefilled Subject:",
     "categories": {
       "general": "General Inquiry",
       "vendor": "Vendor & Creator Inquiry",

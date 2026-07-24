@@ -106,7 +106,7 @@ useSeoMeta({
                       member.name ||
                       member.nameHint ||
                       member.discordId ||
-                      'Member'
+                      t('crewPage.memberAlt')
                     "
                     class="avatar-image"
                     loading="lazy"

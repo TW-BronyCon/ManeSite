@@ -85,11 +85,12 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
           type="button"
           aria-haspopup="true"
           :aria-expanded="openSubmenu === 'apply'"
+          aria-controls="submenu-apply"
           @click="toggleSubmenu('apply')"
         >
           {{ $t("menu.apply") }}
         </button>
-        <ul class="submenu">
+        <ul class="submenu" id="submenu-apply" :aria-hidden="openSubmenu !== 'apply'">
           <li>
             <a
               href="https://go.twbronycon.org/volunteer"
@@ -142,11 +143,12 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
           type="button"
           aria-haspopup="true"
           :aria-expanded="openSubmenu === 'about'"
+          aria-controls="submenu-about"
           @click="toggleSubmenu('about')"
         >
           {{ $t("menu.about") }}
         </button>
-        <ul class="submenu">
+        <ul class="submenu" id="submenu-about" :aria-hidden="openSubmenu !== 'about'">
           <li>
             <NuxtLink
               :to="localePath('/mascot')"
@@ -342,6 +344,7 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
   opacity: 0;
   transform: translateY(8px);
   pointer-events: none;
+  visibility: hidden;
 
   transition: all 0.25s ease;
 }
@@ -361,6 +364,14 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
   display: block;
   padding: 0.6em 1em;
   font-size: 0.95em;
+  transition: all 0.25s ease;
+}
+
+.top-nav .submenu li a:hover,
+.top-nav .submenu li a.router-link-active,
+.top-nav .submenu li a.router-link-exact-active {
+  color: var(--color-gold);
+  background: rgba(226, 184, 102, 0.1);
 }
 
 .top-nav .submenu li .submenu-disabled {
@@ -376,6 +387,7 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
+    visibility: visible;
   }
 }
 

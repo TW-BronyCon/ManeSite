@@ -7,7 +7,6 @@ export const exclude = [
   "home.quotes",
   "home.footer.logoAlt",
   "tickets.tiers",
-  "ticket.description",
   "ticket.descriptions",
   "ticket.features",
   "ticket.tiers",

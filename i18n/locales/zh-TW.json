@@ -18,7 +18,8 @@
     "footer": {
       "logoAlt": "TWBC台灣馬聚官方網站",
       "copyright": "版權所有",
-      "copyrightNotice": "© 2026 TWBC"
+      "copyrightNotice": "© 2026 TWBC",
+      "email": "電子郵件"
     },
     "about": {
       "title": "關於我們",
@@ -288,13 +289,20 @@
     "conceptDesc": "我們的吉祥物象徵著台灣馬迷社群的創造力、多元包容與友誼熱情。從服裝細節到色彩搭配，無不展現出深厚的馬圈文化與在地連結。",
     "loreTitle": "背景故事與性格",
     "loreDesc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. 陪伴每位參加者探索活動現場，帶領大家感受「友誼就是魔法」的奇幻氛圍。",
-    "paletteTitle": "代表色彩"
+    "paletteTitle": "代表色彩",
+    "colors": {
+      "newPink": "新粉紅",
+      "mattePlum": "霧面梅紫",
+      "premiumBlue": "高級藍",
+      "wellRead": "書卷紅"
+    }
   },
 
   "crewPage": {
     "title": "籌備團隊",
     "subtitle": "感謝所有為TWBC無私奉獻的志工與工作人員",
-    "intro": "TWBC由一群熱愛My Little Pony彩虹小馬的馬迷志工共同籌備與營運。成員們分工合作，從活動企劃、美術視覺、資訊技術到現場物資，齊心打造屬於馬迷的夢幻盛會。"
+    "intro": "TWBC由一群熱愛My Little Pony彩虹小馬的馬迷志工共同籌備與營運。成員們分工合作，從活動企劃、美術視覺、資訊技術到現場物資，齊心打造屬於馬迷的夢幻盛會。",
+    "memberAlt": "成員"
   },
 
   "cocPage": {
@@ -316,6 +324,7 @@
     "sendMail": "寄信",
     "inquiryTopicsTitle": "建議郵件主旨標籤",
     "inquiryTopicsDesc": "寄信時可在主旨中標註主題標籤，將有助於籌備組更快速處理您的信件：",
+    "prefilledSubject": "預填主旨：",
     "categories": {
       "general": "一般活動諮詢",
       "vendor": "攤位與創作者諮詢",

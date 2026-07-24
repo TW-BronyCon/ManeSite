@@ -69,6 +69,6 @@ This document defines guidelines and instructions for AI agents working on the T
 - **Crew Data (`app/content/crew.json`)**:
   - Group records support `groupName` (`zh`, `en`), optional `roleId` (Discord Role ID to auto-populate members), and `members`.
   - Member records support `name` (optional hint), `nameHint` (optional developer hint), `discordId` (optional), and `avatar` (optional).
-  - **Discord Syncing**: Run `npm run sync:avatars` (requires `DISCORD_BOT_TOKEN`, optional `DISCORD_GUILD_ID` for per-server Nitro avatars & server nicknames; see `.env.example`) to fetch Discord avatars, save them to `/img/avatars/{discordId}.png`, and update `name` (Discord display name as source of truth) and `avatar` in `crew.json`.
+  - **Discord Syncing**: Run `npm run sync:avatars` (requires `DISCORD_BOT_TOKEN`, optional `DISCORD_GUILD_ID` for per-server Nitro avatars & server nicknames; see `.env.example`) to read `app/content/crew.json` (source input file), fetch Discord avatars, save them to `/img/avatars/{discordId}.png`, and update `name` (Discord display name as source of truth) and `avatar` in the generated `app/content/.generated-crew.json` output file consumed by `app/pages/crew.vue`.
   - **Avatar Override**: If an `avatar` field with an image path or URL is specified (or custom image path outside `/img/avatars/`), it overrides `discordId`.
   - **Fallback Avatar**: If `avatar` is not specified or not yet synced, fall back to `/img/default-avatar.avif`.

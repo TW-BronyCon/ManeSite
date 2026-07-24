@@ -35,10 +35,10 @@ onMounted(() => window.addEventListener("keydown", handleKeydown));
 onUnmounted(() => window.removeEventListener("keydown", handleKeydown));
 
 const paletteColors = [
-  { name: "New Pink", hex: "#FDD0E5" },
-  { name: "Matte Plum", hex: "#AD87B0" },
-  { name: "Premium Blue", hex: "#2551A3" },
-  { name: "Well Read", hex: "#B42F33" },
+  { nameKey: "mascotPage.colors.newPink", hex: "#FDD0E5" },
+  { nameKey: "mascotPage.colors.mattePlum", hex: "#AD87B0" },
+  { nameKey: "mascotPage.colors.premiumBlue", hex: "#2551A3" },
+  { nameKey: "mascotPage.colors.wellRead", hex: "#B42F33" },
 ];
 
 useSeoMeta({
@@ -107,7 +107,7 @@ useSeoMeta({
                 :key="color.hex"
                 class="swatch"
                 :style="{ backgroundColor: color.hex }"
-                :title="color.name"
+                :title="t(color.nameKey)"
               >
                 <span class="swatch-label">{{ color.hex }}</span>
               </div>

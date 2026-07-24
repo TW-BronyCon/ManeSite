@@ -28,6 +28,22 @@ if (fs.existsSync(envPath)) {
 const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const GUILD_ID = process.env.DISCORD_GUILD_ID;
 
+// Fetch with timeout helper
+async function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    return response;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 const crewPath = path.join(rootDir, "app", "content", "crew.json");
 const generatedCrewPath = path.join(
   rootDir,
@@ -91,7 +107,7 @@ if (BOT_TOKEN && GUILD_ID) {
         `Fetching members for role ID ${cleanRoleId} (${group.groupName?.zh || "Group"})...`,
       );
       try {
-        const rRes = await fetch(
+        const rRes = await fetchWithTimeout(
           `https://discord.com/api/v10/guilds/${GUILD_ID}/members?limit=1000`,
           {
             headers: {
@@ -192,7 +208,7 @@ for (const group of crewGroups) {
       // Option 1: Try fetching guild member if GUILD_ID is provided (gets per-guild nickname & per-guild Nitro avatar)
       if (GUILD_ID) {
         try {
-          const gRes = await fetch(
+          const gRes = await fetchWithTimeout(
             `https://discord.com/api/v10/guilds/${GUILD_ID}/members/${discordId}`,
             {
               headers: {
@@ -234,7 +250,7 @@ for (const group of crewGroups) {
 
       // Option 2: Fallback to global user endpoint
       if (!avatarUrl || !discordName) {
-        const uRes = await fetch(
+        const uRes = await fetchWithTimeout(
           `https://discord.com/api/v10/users/${discordId}`,
           {
             headers: {
@@ -271,7 +287,7 @@ for (const group of crewGroups) {
       }
 
       // Download avatar image
-      const imgRes = await fetch(avatarUrl);
+      const imgRes = await fetchWithTimeout(avatarUrl);
       if (imgRes.ok) {
         const urlPath = new URL(avatarUrl).pathname;
         const fileExt = urlPath.endsWith(".gif") ? "gif" : "png";

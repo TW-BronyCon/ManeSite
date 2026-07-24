@@ -169,7 +169,7 @@ const { currentQuote, isQuoteFadingOut } = useQuotes(
             href="mailto:twbronycon2@gmail.com"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Email"
+            :aria-label="$t('home.footer.email')"
             class="social-icon email"
             ><i class="fa-solid fa-envelope"></i
           ></a>
