@@ -90,7 +90,11 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
         >
           {{ $t("menu.apply") }}
         </button>
-        <ul class="submenu" id="submenu-apply" :aria-hidden="openSubmenu !== 'apply'">
+        <ul
+          class="submenu"
+          id="submenu-apply"
+          :aria-hidden="openSubmenu !== 'apply'"
+        >
           <li>
             <a
               href="https://go.twbronycon.org/volunteer"
@@ -148,7 +152,11 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
         >
           {{ $t("menu.about") }}
         </button>
-        <ul class="submenu" id="submenu-about" :aria-hidden="openSubmenu !== 'about'">
+        <ul
+          class="submenu"
+          id="submenu-about"
+          :aria-hidden="openSubmenu !== 'about'"
+        >
           <li>
             <NuxtLink
               :to="localePath('/mascot')"

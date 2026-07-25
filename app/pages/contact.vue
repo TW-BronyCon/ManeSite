@@ -207,7 +207,9 @@ useSeoMeta({
               </div>
 
               <div class="subject-preview">
-                <span class="preview-label">{{ t("contactPage.prefilledSubject") }}</span>
+                <span class="preview-label">{{
+                  t("contactPage.prefilledSubject")
+                }}</span>
                 <code class="preview-code">{{ selectedCategory.tag }} ...</code>
               </div>
             </div>
