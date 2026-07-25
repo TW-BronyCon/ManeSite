@@ -18,7 +18,8 @@
     "footer": {
       "logoAlt": "TWBC台灣馬聚官方網站",
       "copyright": "版權所有",
-      "copyrightNotice": "© 2026 TWBC"
+      "copyrightNotice": "© 2026 TWBC",
+      "email": "電子郵件"
     },
     "about": {
       "title": "關於我們",
@@ -107,6 +108,12 @@
     "navLabel": "主導航",
     "home": "首頁",
     "about": "關於我們",
+    "aboutSub": {
+      "mascot": "大會吉祥物",
+      "crew": "籌備團隊",
+      "coc": "行為準則",
+      "contact": "聯絡我們"
+    },
     "news": "最新消息",
     "ticket": "購票資訊",
     "apply": "活動申請",
@@ -209,12 +216,13 @@
       "social": "大桌及椅子的區域，可以和其他參加者一起聊天或玩各種桌遊與互動遊戲，歡迎隨時拉張椅子加入，結識新朋友！",
       "exhibition": "展示專區。展示精美小馬畫作、手工作品、同人模型與各種社群創作成果。",
       "bar": "吧台餐飲區。提供飲料與休息空間，讓參加者在活動期間能在此放鬆交流。",
-      "checkin": "會場主要報到櫃台。提供票券掃描、領取識別證與活動諮詢服務。",
-      "entrance": "主要的入場排隊與驗票登記處。請跟隨現場工作人員引導排隊入場並領取識別證。"
+      "checkin": "會場主要報到櫃台（位於10樓右手邊最底）。提供票券掃描、領取識別證與活動諮詢服務。"
     }
   },
   "transport": {
     "title": "交通指南",
+    "floor": "館內樓層動線",
+    "floorDesc": "進入大樓搭乘電梯至10樓後，往右手邊走到最底即達會場入口與報到處。",
     "mrt": "捷運",
     "mrtDesc": "搭乘捷運中和新蘆線（蘆洲線）至三和國中站(O51)，由2號出口出站即達（會場位於捷運共構大樓內）。",
     "bus": "公車",
@@ -273,5 +281,57 @@
     "viewSchedule": "查看時程表",
     "viewOnMap": "查看地圖",
     "viewOnMapTooltip": "在互動地圖中查看此區域"
+  },
+
+  "mascotPage": {
+    "title": "大會吉祥物",
+    "subtitle": "Taiwan BronyCon 官方形象角色介紹",
+    "conceptTitle": "角色設計概念",
+    "conceptDesc": "我們的吉祥物象徵著台灣馬迷社群的創造力、多元包容與友誼熱情。從服裝細節到色彩搭配，無不展現出深厚的馬圈文化與在地連結。",
+    "loreTitle": "背景故事與性格",
+    "loreDesc": "來自麒麟村的守護者意外受到「可愛地圖」的友誼召喚，受引誘穿過發光的流沙，降臨在台灣的深山。",
+    "paletteTitle": "代表色彩",
+    "colors": {
+      "newPink": "新粉紅",
+      "mattePlum": "霧面梅紫",
+      "premiumBlue": "高級藍",
+      "wellRead": "書卷紅"
+    }
+  },
+
+  "crewPage": {
+    "title": "籌備團隊",
+    "subtitle": "感謝所有為TWBC無私奉獻的志工與工作人員",
+    "intro": "TWBC由一群熱愛My Little Pony彩虹小馬的馬迷志工共同籌備與營運。成員們分工合作，從活動企劃、美術視覺、資訊技術到現場物資，齊心打造屬於馬迷的夢幻盛會。",
+    "memberAlt": "成員"
+  },
+
+  "cocPage": {
+    "title": "行為準則",
+    "subtitle": "臺灣馬聚會場安全與社群規範",
+    "notice": "請所有參加者、創作者與工作人員共同遵守以下規範，確保每個人都能在安全、友善且互相信任的環境中享受盛會。"
+  },
+
+  "contactPage": {
+    "title": "聯絡我們",
+    "subtitle": "有任何問題或建議？歡迎隨時與TWBC籌備團隊聯繫！",
+    "socialTitle": "官方社群頻道",
+    "socialDesc": "歡迎追蹤我們的官方社群頻道以獲取最新動態，或透過電子郵件與我們聯繫。",
+    "emailTitle": "電子郵件聯絡",
+    "emailDesc": "如有任何活動問題、創作者諮詢或合作需求，歡迎直接寄信至官方信箱。",
+    "officialEmail": "官方電子郵件",
+    "copyEmail": "複製信箱地址",
+    "emailCopied": "已複製！",
+    "sendMail": "寄信",
+    "inquiryTopicsTitle": "建議郵件主旨標籤",
+    "inquiryTopicsDesc": "寄信時可在主旨中標註主題標籤，將有助於籌備組更快速處理您的信件：",
+    "prefilledSubject": "預填主旨：",
+    "categories": {
+      "general": "一般活動諮詢",
+      "vendor": "攤位與創作者諮詢",
+      "volunteer": "志工與工作人員諮詢",
+      "media": "媒體與合作邀約",
+      "other": "其他事項"
+    }
   }
 }

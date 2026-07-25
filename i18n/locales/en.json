@@ -18,7 +18,8 @@
     "footer": {
       "logoAlt": "TWBC Taiwan BronyCon Official Website",
       "copyright": "All Rights Reserved",
-      "copyrightNotice": "© 2026 TWBC"
+      "copyrightNotice": "© 2026 TWBC",
+      "email": "Email"
     },
     "about": {
       "title": "About Us",
@@ -107,6 +108,12 @@
     "navLabel": "Primary Navigation",
     "home": "Home",
     "about": "About Us",
+    "aboutSub": {
+      "mascot": "Mascot",
+      "crew": "Crew & Team",
+      "coc": "Code of Conduct",
+      "contact": "Contact Us"
+    },
     "news": "News",
     "ticket": "Tickets",
     "apply": "Apply",
@@ -116,9 +123,9 @@
     "booths": "Booths"
   },
   "tba": {
-    "about": "About Us(TBA)",
-    "schedule": "Schedule(TBA)",
-    "venue": "Venue(TBA)"
+    "about": "About Us (TBA)",
+    "schedule": "Schedule (TBA)",
+    "venue": "Venue (TBA)"
   },
   "apply": {
     "volunteer": "Volunteer",
@@ -209,12 +216,13 @@
       "social": "At the large table and seating area, you can chat or play various board games and interactive games with other participants. Feel free to pull up a chair anytime to join in and meet new friends!",
       "exhibition": "A spacious gallery displaying artworks, models, and community showcases.",
       "bar": "Bar & Lounge. Offers drinks and a cozy seating area for attendees to relax and socialize.",
-      "checkin": "The main check-in counter for registration, ticket scanning, and badge collections.",
-      "entrance": "The main entry queue area for ticket validation and badge collection. Please follow staff directions during peak hours."
+      "checkin": "The main check-in counter (located at the end of the hallway to the right on the 10th floor) for registration, ticket scanning, and badge collections."
     }
   },
   "transport": {
     "title": "Transport Guide",
+    "floor": "Floor & Entrance Directions",
+    "floorDesc": "After entering the building, take the elevator to the 10th floor and walk all the way to the end on your right to reach the venue entrance.",
     "mrt": "MRT",
     "mrtDesc": "Take the MRT Orange Line (Luzhou Line) to Sanhe Junior High School Station (O51). Walk from Exit 2 (the venue is directly adjacent to the station building).",
     "bus": "Bus",
@@ -273,5 +281,57 @@
     "viewSchedule": "View Schedule",
     "viewOnMap": "View Map",
     "viewOnMapTooltip": "View this area on the interactive map"
+  },
+
+  "mascotPage": {
+    "title": "Mascot",
+    "subtitle": "Official Mascot of Taiwan BronyCon",
+    "conceptTitle": "Design Concept",
+    "conceptDesc": "Our mascot symbolizes the creativity, diversity, and spirit of friendship within the Taiwanese brony community. From costume details to color palette, every design element reflects local culture and passion for My Little Pony.",
+    "loreTitle": "Backstory & Personality",
+    "loreDesc": "A guardian from Kirin Village, unexpectedly summoned by the \"Cutie Map,\" is lured through glowing quicksand and arrives in the deep mountains of Taiwan.",
+    "paletteTitle": "Color Palette",
+    "colors": {
+      "newPink": "New Pink",
+      "mattePlum": "Matte Plum",
+      "premiumBlue": "Premium Blue",
+      "wellRead": "Well Read"
+    }
+  },
+
+  "crewPage": {
+    "title": "Crew & Team",
+    "subtitle": "Special thanks to all volunteers and team members behind TWBC",
+    "intro": "TWBC is organized and operated by passionate brony volunteers. Team members collaborate across event planning, visual design, tech infrastructure, and venue operations to bring this event to life.",
+    "memberAlt": "Member"
+  },
+
+  "cocPage": {
+    "title": "Code of Conduct",
+    "subtitle": "Taiwan BronyCon Safety & Community Guidelines",
+    "notice": "All attendees, creators, and staff members are expected to follow these guidelines to ensure a safe, friendly, and respectful environment for everyone."
+  },
+
+  "contactPage": {
+    "title": "Contact Us",
+    "subtitle": "Have questions or suggestions? Get in touch with the TWBC team!",
+    "socialTitle": "Official Channels",
+    "socialDesc": "Follow our official channels for updates or reach out directly.",
+    "emailTitle": "Direct Email Inquiry",
+    "emailDesc": "Send an email directly to our official mailbox for any questions, feedback, or collaboration opportunities.",
+    "officialEmail": "Official Email Address",
+    "copyEmail": "Copy Email Address",
+    "emailCopied": "Copied!",
+    "sendMail": "Send Email",
+    "inquiryTopicsTitle": "Recommended Email Subject Tags",
+    "inquiryTopicsDesc": "Including a category tag in your email subject helps us respond faster:",
+    "prefilledSubject": "Prefilled Subject:",
+    "categories": {
+      "general": "General Inquiry",
+      "vendor": "Vendor & Creator Inquiry",
+      "volunteer": "Staff & Volunteer Inquiry",
+      "media": "Media & Collaboration",
+      "other": "Other Topics"
+    }
   }
 }

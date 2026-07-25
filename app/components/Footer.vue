@@ -165,6 +165,14 @@ const { currentQuote, isQuoteFadingOut } = useQuotes(
             class="social-icon instagram"
             ><i class="fa-brands fa-instagram"></i
           ></a>
+          <a
+            href="mailto:twbronycon2@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            :aria-label="$t('home.footer.email')"
+            class="social-icon email"
+            ><i class="fa-solid fa-envelope"></i
+          ></a>
         </div>
       </div>
 

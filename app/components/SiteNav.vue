@@ -85,11 +85,16 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
           type="button"
           aria-haspopup="true"
           :aria-expanded="openSubmenu === 'apply'"
+          aria-controls="submenu-apply"
           @click="toggleSubmenu('apply')"
         >
           {{ $t("menu.apply") }}
         </button>
-        <ul class="submenu">
+        <ul
+          class="submenu"
+          id="submenu-apply"
+          :aria-hidden="openSubmenu !== 'apply'"
+        >
           <li>
             <a
               href="https://go.twbronycon.org/volunteer"
@@ -136,16 +141,65 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
       "
       >{{ $t("menu.transport") }}</NuxtLink
     >
-    <NuxtLink
-      v-if="false"
-      :to="localePath('/about')"
-      @click="
-        isNavOpen = false;
-        openSubmenu = null;
-      "
-      >{{ $t("menu.about") }}</NuxtLink
-    >
-    <span v-else class="nav-coming-soon">{{ $t("tba.about") }}</span>
+    <ul class="menu">
+      <li class="menu-group" :class="{ open: openSubmenu === 'about' }">
+        <button
+          type="button"
+          aria-haspopup="true"
+          :aria-expanded="openSubmenu === 'about'"
+          aria-controls="submenu-about"
+          @click="toggleSubmenu('about')"
+        >
+          {{ $t("menu.about") }}
+        </button>
+        <ul
+          class="submenu"
+          id="submenu-about"
+          :aria-hidden="openSubmenu !== 'about'"
+        >
+          <li>
+            <NuxtLink
+              :to="localePath('/mascot')"
+              @click="
+                isNavOpen = false;
+                openSubmenu = null;
+              "
+              >{{ $t("menu.aboutSub.mascot") }}</NuxtLink
+            >
+          </li>
+          <li>
+            <NuxtLink
+              :to="localePath('/crew')"
+              @click="
+                isNavOpen = false;
+                openSubmenu = null;
+              "
+              >{{ $t("menu.aboutSub.crew") }}</NuxtLink
+            >
+          </li>
+          <li>
+            <NuxtLink
+              :to="localePath('/coc')"
+              @click="
+                isNavOpen = false;
+                openSubmenu = null;
+              "
+              >{{ $t("menu.aboutSub.coc") }}</NuxtLink
+            >
+          </li>
+          <li>
+            <NuxtLink
+              :to="localePath('/contact')"
+              @click="
+                isNavOpen = false;
+                openSubmenu = null;
+              "
+              >{{ $t("menu.aboutSub.contact") }}</NuxtLink
+            >
+          </li>
+        </ul>
+      </li>
+    </ul>
   </nav>
 </template>
 
@@ -197,9 +251,16 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
 .top-nav a,
 .top-nav .menu-group > button {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+
+  margin: 0;
+  padding: 0.35em 0.3em;
 
   color: #fff;
+  font-family: inherit;
   font-size: clamp(0.86em, 1.35vw, 1.02em);
+  line-height: 1.2;
   text-decoration: none;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.65);
 
@@ -212,7 +273,7 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
 
   position: absolute;
   left: 50%;
-  bottom: -2px;
+  bottom: 0;
 
   width: 0;
   height: 2px;
@@ -246,25 +307,24 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
 }
 
 .top-nav .menu {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: clamp(0.5em, 2vw, 2em);
 
   margin: 0;
   padding: 0;
 
   list-style: none;
-  transform: translateY(-1px);
 }
 
 .top-nav .menu-group {
   position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 
 .top-nav .menu-group > button {
   background: none;
   border: none;
-  padding: 0;
   cursor: pointer;
 }
 
@@ -275,7 +335,7 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
 
   min-width: 8em;
 
-  margin-top: 0.5em;
+  margin-top: 0.25em;
   padding: 0.5em 0;
 
   list-style: none;
@@ -292,8 +352,19 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
   opacity: 0;
   transform: translateY(8px);
   pointer-events: none;
+  visibility: hidden;
 
   transition: all 0.25s ease;
+}
+
+.top-nav .submenu::before {
+  content: "";
+
+  position: absolute;
+  top: -1em;
+  left: -1em;
+  right: -1em;
+  height: 1.2em;
 }
 
 .top-nav .submenu li a,
@@ -301,6 +372,14 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
   display: block;
   padding: 0.6em 1em;
   font-size: 0.95em;
+  transition: all 0.25s ease;
+}
+
+.top-nav .submenu li a:hover,
+.top-nav .submenu li a.router-link-active,
+.top-nav .submenu li a.router-link-exact-active {
+  color: var(--color-gold);
+  background: rgba(226, 184, 102, 0.1);
 }
 
 .top-nav .submenu li .submenu-disabled {
@@ -310,11 +389,14 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
   white-space: nowrap;
 }
 
-.top-nav .menu-group:hover .submenu,
-.top-nav .menu-group.open .submenu {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+@media (min-width: 901px) {
+  .top-nav .menu-group:hover .submenu,
+  .top-nav .menu-group.open .submenu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    visibility: visible;
+  }
 }
 
 .nav-toggle {
@@ -400,9 +482,15 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
   .top-nav .submenu li .submenu-disabled {
     display: block;
 
+    width: 100%;
+
+    margin: 0;
     padding: 0.55rem 0.7rem;
 
+    font-family: inherit;
     font-size: 1rem;
+    line-height: 1.2;
+    text-align: left;
   }
 
   .top-nav a::after,
@@ -414,20 +502,41 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
     display: block;
   }
 
+  .top-nav .menu-group {
+    display: block;
+  }
+
   .top-nav .submenu {
     position: static;
 
-    margin: 0.1rem 0 0.3rem 0.75rem;
-
     display: none;
+
+    min-width: 0;
+    margin: 0.2rem 0 0.4rem 0.5rem;
+    padding: 0.2rem 0;
 
     opacity: 1;
     transform: none;
     pointer-events: auto;
 
     background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.5em;
 
     box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .top-nav .submenu::before {
+    display: none;
+  }
+
+  .top-nav .submenu li a,
+  .top-nav .submenu li .submenu-disabled {
+    padding: 0.45rem 0.75rem;
+
+    font-size: 0.92rem;
   }
 
   .top-nav .menu-group.open .submenu {
