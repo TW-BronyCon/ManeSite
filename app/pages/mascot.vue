@@ -82,6 +82,11 @@ useSeoMeta({
         <!-- Mascot Details Column -->
         <div class="mascot-details-col">
           <div class="mascot-card">
+            <h3>{{ t("mascotPage.nameTitle") }}</h3>
+            <p>{{ t("mascotPage.name") }}</p>
+          </div>
+
+          <div class="mascot-card">
             <h3>{{ t("mascotPage.conceptTitle") }}</h3>
             <p>{{ t("mascotPage.conceptDesc") }}</p>
           </div>
