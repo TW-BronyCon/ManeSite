@@ -10,6 +10,7 @@ export type EventType =
   | "workshop"
   | "vendor"
   | "social"
+  | "social-event"
   | "social-special";
 
 export interface LocalizedText {
@@ -49,6 +50,7 @@ export const EVENT_COLORS: Record<EventType, string> = {
   workshop: "#ffaa82",
   vendor: "#d6aa03",
   social: "#81fff9",
+  "social-event": "#d99ae8",
   "social-special": "#149be6",
 };
 
@@ -157,38 +159,51 @@ export const events: TimetableEvent[] = [
     id: "still-challenge",
     title: { zh: "劇照大挑戰", en: "Pony Still Challenge" },
     track: "main",
-    start: "14:15",
-    end: "15:15",
+    start: "15:00",
+    end: "15:45",
     type: "community",
     detail: {
-      zh: "桃漪考考你有沒有認真觀看關於她來自的世界的動畫，你能否根據一張畫面就能猜出是MLP中哪一集嗎?",
+      zh: "桃漪考考你有沒有認真觀看關於她來自的世界的動畫，你能否根據一張畫面就能猜出是劇中哪一集嗎?",
       en: "Peach Ripple wants to test your knowledge of the world where she came from! Can you guess the episode just by looking at a single screenshot?",
     },
   },
-  //{
-  //  title: { zh: '小馬知識大挑戰', en: 'Pony Trivia Challenge' },
-  //  track: 'main',
-  //  start: '14:15',
-  //  end: '15:15',
-  //  type: 'community',
-  //  detail: {
-  //    zh: '考驗大家對 MLP 世界的了解程度，從角色、劇情到冷知識，看看誰才是真正的小馬百科。',
-  //    en: 'Test your knowledge of the MLP world, from characters and stories to fun trivia.',
-  //  },
-  //},
+  {
+    id: "pony-trivia-challenge",
+    title: { zh: "小馬知識大挑戰", en: "Pony Trivia Challenge" },
+    track: "main",
+    start: "14:15",
+    end: "15:00",
+    type: "community",
+    detail: {
+      zh: "考驗大家對彩虹小馬世界的了解程度，從角色、劇情到冷知識，看看誰才是真正的小馬百科。",
+      en: "Test your knowledge of the MLP world, from characters and stories to fun trivia.",
+    },
+  },
   {
     id: "friendship-sinks",
     title: {
       zh: "友誼的小船說翻就翻",
       en: "The boat of friendship sinks when least expected",
     },
-    track: "main",
-    start: "15:30",
-    end: "16:30",
-    type: "community",
+    track: "social",
+    start: "16:30",
+    end: "18:00",
+    type: "social-event",
     detail: {
       zh: "最刺激的友誼破冰遊戲，你與朋友之間的友情是否經得起考驗(本活動將會有大型社死現場，歡迎內心勇敢堅強的你前來挑戰)",
       en: "The most thrilling friendship icebreaker! Is your bond with your friends strong enough to survive the ultimate test? (This event features massive public embarrassment and hilarious cringe moments. Brave and fearless souls are highly welcome to take on the challenge!)",
+    },
+  },
+  {
+    id: "translation-chaos",
+    title: { zh: "友誼就是翻譯災難", en: "Friendship Is Translation Chaos" },
+    track: "main",
+    start: "15:45",
+    end: "16:30",
+    type: "community",
+    detail: {
+      zh: "在這個活動中，你將會遇到各種翻譯上的挑戰，看看你與朋友之間的默契是否能克服這些困難。",
+      en: "In this event, you'll face various translation challenges. See if you and your friends can overcome these obstacles together.",
     },
   },
   //{
@@ -244,7 +259,7 @@ export const events: TimetableEvent[] = [
     id: "workshop-open",
     title: { zh: "工坊區開放", en: "Workshop Open" },
     track: "workshop",
-    start: "10:30",
+    start: "10:00",
     end: "17:00",
     type: "workshop",
     detail: {
@@ -253,11 +268,11 @@ export const events: TimetableEvent[] = [
     },
   },
   {
-    id: "vendor-morning",
+    id: "vendorStreet",
     title: { zh: "攤位街", en: "Vendor Area" },
     track: "vendor",
-    start: "10:30",
-    end: "12:00",
+    start: "10:00",
+    end: "17:00",
     type: "vendor",
     detail: {
       zh: "攤位街開放，可以逛創作攤位、收藏周邊，支持喜歡的創作者。",
@@ -265,23 +280,11 @@ export const events: TimetableEvent[] = [
     },
   },
   {
-    id: "vendor-afternoon",
-    title: { zh: "攤位街", en: "Vendor Area" },
-    track: "vendor",
-    start: "13:00",
-    end: "17:00",
-    type: "vendor",
-    detail: {
-      zh: "攤位街開放，可以逛創作攤位、收藏周邊，支持喜歡的創作者。",
-      en: "Vendor Alley remains open in the afternoon.",
-    },
-  },
-  {
-    id: "social-morning",
+    id: "social-area",
     title: { zh: "交誼區", en: "Social Area" },
     track: "social",
-    start: "10:30",
-    end: "12:00",
+    start: "10:00",
+    end: "16:30",
     type: "social",
     detail: {
       zh: "擁有大桌及椅子的區域，可以和其他參加者一起聊天或玩各種桌遊與互動遊戲。",
@@ -302,16 +305,4 @@ export const events: TimetableEvent[] = [
   //    en: 'Play a social deduction board game and find the changeling hidden among the group.',
   //  },
   //},
-  {
-    id: "social-afternoon",
-    title: { zh: "交誼區", en: "Social Area" },
-    track: "social",
-    start: "13:00",
-    end: "17:00",
-    type: "social",
-    detail: {
-      zh: "擁有大桌及椅子的區域，可以和其他參加者一起聊天或玩各種桌遊與互動遊戲。",
-      en: "The area features large tables and chairs where participants can chat or play various board games and interactive games.",
-    },
-  },
 ];
