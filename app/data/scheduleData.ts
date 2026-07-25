@@ -202,8 +202,8 @@ export const events: TimetableEvent[] = [
     end: "16:30",
     type: "community",
     detail: {
-      zh: "在這個活動中，你將會遇到各種翻譯上的挑戰，看看你與朋友之間的默契是否能克服這些困難。",
-      en: "In this event, you'll face various translation challenges. See if you and your friends can overcome these obstacles together.",
+      zh: "歌曲翻譯總是困難重重，你能根據隨便翻譯的歌詞猜出是哪一首歌嗎?",
+      en: "Translating songs is always tricky. Can you guess the song from a terrible translation?",
     },
   },
   //{
