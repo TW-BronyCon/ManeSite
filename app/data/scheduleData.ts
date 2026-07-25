@@ -156,7 +156,7 @@ export const events: TimetableEvent[] = [
     },
   },
   {
-    id: "still-challenge",
+    id: "pony-still-challenge",
     title: { zh: "劇照大挑戰", en: "Pony Still Challenge" },
     track: "main",
     start: "15:00",
