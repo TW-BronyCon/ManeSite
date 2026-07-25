@@ -31,6 +31,16 @@ useSeoMeta({
       <div class="transport-grid">
         <!-- Transport Info Cards -->
         <div class="transport-info-col">
+          <div class="transport-card highlight-card">
+            <div class="card-icon">
+              <i class="fa-solid fa-elevator"></i>
+            </div>
+            <div class="card-text">
+              <h5>{{ t("transport.floor") }}</h5>
+              <p>{{ t("transport.floorDesc") }}</p>
+            </div>
+          </div>
+
           <div class="transport-card">
             <div class="card-icon">
               <i class="fa-solid fa-train-subway"></i>
@@ -107,6 +117,16 @@ useSeoMeta({
   background: rgba(20, 10, 25, 0.55);
   border: 1px solid rgba(255, 230, 167, 0.08);
   transition: all 0.3s ease;
+}
+
+.transport-card.highlight-card {
+  background: linear-gradient(
+    135deg,
+    rgba(72, 38, 82, 0.7),
+    rgba(46, 21, 56, 0.8)
+  );
+  border: 1px solid rgba(255, 230, 167, 0.25);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .transport-card:hover {

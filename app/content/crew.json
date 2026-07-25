@@ -37,6 +37,14 @@
   },
   {
     "groupName": {
+      "zh": "美術設計",
+      "en": "Art & Design"
+    },
+    "roleId": "1530471787668832386",
+    "members": []
+  },
+  {
+    "groupName": {
       "zh": "現場志工",
       "en": "Volunteers"
     },

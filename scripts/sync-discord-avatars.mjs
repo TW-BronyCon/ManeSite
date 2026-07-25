@@ -174,6 +174,7 @@ if (BOT_TOKEN && GUILD_ID) {
 
 let updatedCount = 0;
 const activeDiscordIds = new Set();
+const fetchedUsers = new Map();
 
 // Step 2: Download avatars and update names/paths in compiled output
 for (const group of crewGroups) {
@@ -194,6 +195,25 @@ for (const group of crewGroups) {
     ) {
       console.log(
         `Skipping Discord avatar download for ${member.name || member.nameHint || discordId} (custom avatar override)`,
+      );
+      continue;
+    }
+
+    if (fetchedUsers.has(discordId)) {
+      const cached = fetchedUsers.get(discordId);
+      if (cached) {
+        if (cached.discordName && !member.nameOverride) {
+          member.name = cached.discordName;
+        } else if (!member.name && member.nameHint) {
+          member.name = member.nameHint;
+        }
+        if (cached.avatar) {
+          member.avatar = cached.avatar;
+        }
+      }
+      const displayName = member.name || member.nameHint || discordId;
+      console.log(
+        `Skipping Discord fetch for ${displayName} (${discordId}) - already fetched`,
       );
       continue;
     }
@@ -265,6 +285,10 @@ for (const group of crewGroups) {
             `Failed to fetch global user ${discordId}: HTTP ${uRes.status} ${uRes.statusText}`,
           );
           member.name = member.name || member.nameHint;
+          fetchedUsers.set(discordId, {
+            discordName: member.name,
+            avatar: member.avatar,
+          });
           continue;
         }
 
@@ -304,11 +328,20 @@ for (const group of crewGroups) {
       } else {
         console.error(`Failed to download avatar image from ${avatarUrl}`);
       }
+
+      fetchedUsers.set(discordId, {
+        discordName,
+        avatar: member.avatar,
+      });
     } catch (err) {
       console.error(
         `Error processing ${displayNameHint} (${discordId}):`,
         err.message,
       );
+      fetchedUsers.set(discordId, {
+        discordName: member.name || member.nameHint,
+        avatar: member.avatar,
+      });
     }
   }
 }

@@ -54,7 +54,6 @@ useSeoMeta({
       <div class="coc-container">
         <!-- Notice Card -->
         <div class="coc-notice-card">
-          <i class="fa-solid fa-shield-halved icon"></i>
           <p>{{ t("cocPage.notice") }}</p>
         </div>
 

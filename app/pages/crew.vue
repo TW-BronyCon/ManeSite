@@ -252,25 +252,11 @@ useSeoMeta({
   align-items: center;
   text-align: center;
   padding: 1.4rem 1rem 1.2rem;
-  background: rgba(25, 12, 35, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1.2rem;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .crew-member-card:hover {
   transform: translateY(-6px);
-  background: radial-gradient(
-    circle at top,
-    rgba(72, 38, 82, 0.5) 0%,
-    rgba(25, 12, 35, 0.65) 100%
-  );
-  border-color: rgba(226, 184, 102, 0.35);
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.4),
-    0 0 15px rgba(226, 184, 102, 0.15);
 }
 
 .avatar-halo {

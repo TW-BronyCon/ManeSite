@@ -216,12 +216,13 @@
       "social": "At the large table and seating area, you can chat or play various board games and interactive games with other participants. Feel free to pull up a chair anytime to join in and meet new friends!",
       "exhibition": "A spacious gallery displaying artworks, models, and community showcases.",
       "bar": "Bar & Lounge. Offers drinks and a cozy seating area for attendees to relax and socialize.",
-      "checkin": "The main check-in counter for registration, ticket scanning, and badge collections.",
-      "entrance": "The main entry queue area for ticket validation and badge collection. Please follow staff directions during peak hours."
+      "checkin": "The main check-in counter (located at the end of the hallway to the right on the 10th floor) for registration, ticket scanning, and badge collections."
     }
   },
   "transport": {
     "title": "Transport Guide",
+    "floor": "Floor & Entrance Directions",
+    "floorDesc": "After entering the building, take the elevator to the 10th floor and walk all the way to the end on your right to reach the venue entrance.",
     "mrt": "MRT",
     "mrtDesc": "Take the MRT Orange Line (Luzhou Line) to Sanhe Junior High School Station (O51). Walk from Exit 2 (the venue is directly adjacent to the station building).",
     "bus": "Bus",
