@@ -126,6 +126,14 @@ const hasSurfaceSlot = computed(() => !!slots.surface);
 @media (max-width: 850px) {
   .page-layout__surface {
     padding: 1.5em 1.2em 2em;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-layout__surface {
+    padding: 1.2em 0.85em 1.5em;
+    border-radius: 0.85em;
   }
 }
 </style>

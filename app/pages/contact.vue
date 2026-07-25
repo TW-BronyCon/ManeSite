@@ -226,11 +226,13 @@ useSeoMeta({
   grid-template-columns: 1fr 1.5fr;
   gap: 2.5rem;
   align-items: stretch;
+  min-width: 0;
 }
 
 @media (max-width: 850px) {
   .contact-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
@@ -239,6 +241,7 @@ useSeoMeta({
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-width: 0;
 }
 
 .info-card,
@@ -251,6 +254,21 @@ useSeoMeta({
   background: rgba(20, 10, 25, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1rem;
+  min-width: 0;
+}
+
+@media (max-width: 850px) {
+  .info-card,
+  .email-card {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-card,
+  .email-card {
+    padding: 1rem;
+  }
 }
 
 .info-card h3,
@@ -288,6 +306,7 @@ useSeoMeta({
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
+  min-width: 0;
 }
 
 .social-btn:hover {
@@ -310,12 +329,27 @@ useSeoMeta({
   flex-direction: column;
   gap: 1.2rem;
   margin-bottom: 1.8rem;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .email-display-box {
+    padding: 0.85rem;
+    gap: 0.85rem;
+  }
 }
 
 .email-address-wrapper {
   display: flex;
   align-items: center;
   gap: 1rem;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .email-address-wrapper {
+    gap: 0.65rem;
+  }
 }
 
 .email-icon {
@@ -324,12 +358,21 @@ useSeoMeta({
   background: rgba(226, 184, 102, 0.1);
   padding: 0.8rem;
   border-radius: 50%;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .email-icon {
+    font-size: 1.2rem;
+    padding: 0.55rem;
+  }
 }
 
 .email-text-group {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  min-width: 0;
 }
 
 .email-label {
@@ -345,6 +388,14 @@ useSeoMeta({
   color: #ffffff;
   text-decoration: none;
   transition: color 0.25s ease;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+  .email-address {
+    font-size: 0.98rem;
+  }
 }
 
 .email-address:hover {
@@ -357,9 +408,17 @@ useSeoMeta({
   flex-wrap: wrap;
 }
 
+@media (max-width: 480px) {
+  .email-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
 .action-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
   padding: 0.65rem 1.2rem;
   border-radius: 0.5rem;
@@ -368,6 +427,13 @@ useSeoMeta({
   cursor: pointer;
   text-decoration: none;
   transition: all 0.25s ease;
+  max-width: 100%;
+}
+
+@media (max-width: 480px) {
+  .action-btn {
+    width: 100%;
+  }
 }
 
 .copy-btn {
@@ -398,6 +464,7 @@ useSeoMeta({
   flex-direction: column;
   gap: 0.8rem;
   margin-top: auto;
+  min-width: 0;
 }
 
 .topics-section h4 {
@@ -430,6 +497,7 @@ useSeoMeta({
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  max-width: 100%;
 }
 
 .category-pill:hover {
@@ -453,14 +521,27 @@ useSeoMeta({
   border-radius: 0.5rem;
   font-size: 0.82rem;
   margin-top: 0.4rem;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+  .subject-preview {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
 }
 
 .preview-label {
   color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
 }
 
 .preview-code {
   color: var(--color-gold);
   font-family: monospace;
+  word-break: break-all;
+  min-width: 0;
 }
 </style>
