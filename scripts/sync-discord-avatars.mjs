@@ -51,7 +51,7 @@ const generatedCrewPath = path.join(
   "content",
   ".generated-crew.json",
 );
-const avatarsDir = path.join(rootDir, "public", "img", "avatars");
+const avatarsDir = path.join(rootDir, "public", "img", "avatar", "discord");
 
 if (!fs.existsSync(avatarsDir)) {
   fs.mkdirSync(avatarsDir, { recursive: true });
@@ -190,7 +190,7 @@ for (const group of crewGroups) {
     // Check for explicit custom avatar overrides
     if (
       member.override ||
-      (member.avatar && !member.avatar.startsWith("/img/avatars/"))
+      (member.avatar && !member.avatar.startsWith("/img/avatar/discord/"))
     ) {
       console.log(
         `Skipping Discord avatar download for ${member.name || member.nameHint || discordId} (custom avatar override)`,
@@ -296,10 +296,10 @@ for (const group of crewGroups) {
         const filePath = path.join(avatarsDir, fileName);
         fs.writeFileSync(filePath, buffer);
 
-        member.avatar = `/img/avatars/${fileName}`;
+        member.avatar = `/img/avatar/discord/${fileName}`;
         updatedCount++;
         console.log(
-          `Saved ${member.name}'s info & avatar to /img/avatars/${fileName}`,
+          `Saved ${member.name}'s info & avatar to /img/avatar/discord/${fileName}`,
         );
       } else {
         console.error(`Failed to download avatar image from ${avatarUrl}`);
@@ -321,7 +321,9 @@ try {
     if (ext === ".png" || ext === ".gif" || ext === ".webp") {
       const fileDiscordId = path.basename(file, ext);
       if (!activeDiscordIds.has(fileDiscordId)) {
-        console.log(`🧹 Pruned stale avatar image: /img/avatars/${file}`);
+        console.log(
+          `🧹 Pruned stale avatar image: /img/avatar/discord/${file}`,
+        );
         fs.unlinkSync(path.join(avatarsDir, file));
       }
     }

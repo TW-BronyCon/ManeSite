@@ -27,5 +27,5 @@ logs
 temp/
 
 # Downloaded Discord avatars and generated crew build cache
-public/img/avatars/
+public/img/avatar/discord/
 app/content/.generated-crew.json
