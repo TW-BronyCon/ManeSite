@@ -17,6 +17,7 @@ export const exclude = [
   "tba.",
   "events",
   "schedule.types",
+  "mascotPage.colors",
 ];
 export const output = false;
 export const add = false;

@@ -9,30 +9,23 @@ definePageMeta({
   underDevelopment: false,
 });
 
+// Lightbox state
 const isLightboxOpen = ref(false);
-const currentImage = ref("");
+const currentImage = computed(() => "/img/mascot.avif");
 
-const openLightbox = (imgSrc: string = "/img/mascot.avif") => {
-  currentImage.value = imgSrc;
-  isLightboxOpen.value = true;
-};
-
-function handleContentClick(e: MouseEvent) {
-  const target = e.target as HTMLElement;
-  if (target && target.tagName === "IMG") {
-    currentImage.value = (target as HTMLImageElement).src;
-    isLightboxOpen.value = true;
-  }
-}
-
-const handleKeydown = (e: KeyboardEvent) => {
-  if (e.key === "Escape" && isLightboxOpen.value) {
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (e.key === "Escape") {
     isLightboxOpen.value = false;
   }
 };
 
-onMounted(() => window.addEventListener("keydown", handleKeydown));
-onUnmounted(() => window.removeEventListener("keydown", handleKeydown));
+onMounted(() => {
+  window.addEventListener("keydown", handleKeyDown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("keydown", handleKeyDown);
+});
 
 const paletteColors = [
   { nameKey: "mascotPage.colors.newPink", hex: "#FDD0E5" },
@@ -64,7 +57,7 @@ useSeoMeta({
     </template>
 
     <template #surface>
-      <div class="mascot-grid" @click="handleContentClick">
+      <div class="mascot-grid">
         <!-- Mascot Showcase Image Column -->
         <div class="mascot-visual-col">
           <div
@@ -72,9 +65,9 @@ useSeoMeta({
             role="button"
             tabindex="0"
             :aria-label="t('common.zoomImage')"
-            @click="openLightbox('/img/mascot.avif')"
-            @keydown.enter="openLightbox('/img/mascot.avif')"
-            @keydown.space.prevent="openLightbox('/img/mascot.avif')"
+            @click="isLightboxOpen = true"
+            @keydown.enter="isLightboxOpen = true"
+            @keydown.space.prevent="isLightboxOpen = true"
           >
             <img
               src="/img/mascot.avif"
@@ -125,10 +118,10 @@ useSeoMeta({
             @click="isLightboxOpen = false"
           >
             <button
-              type="button"
               class="lightbox-close"
-              :aria-label="t('common.close')"
+              type="button"
               @click="isLightboxOpen = false"
+              :aria-label="t('common.close')"
             >
               <i class="fa-solid fa-xmark"></i>
             </button>
@@ -334,18 +327,20 @@ useSeoMeta({
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
-/* Lightbox Modal Styles */
+/* Lightbox Styles */
 .lightbox-overlay {
   position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: rgba(10, 5, 20, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 5, 20, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
   cursor: zoom-out;
 }
 
@@ -353,30 +348,29 @@ useSeoMeta({
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 230, 167, 0.15);
+  color: #ffffff;
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.25s ease;
-  z-index: 10000;
+  z-index: 1010;
 }
 
 .lightbox-close:hover {
   background: var(--color-gold);
-  color: #140a1e;
+  color: #120b18;
+  border-color: var(--color-gold);
   transform: scale(1.1);
 }
 
 .lightbox-content {
-  max-width: 90vw;
-  max-height: 85vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -384,15 +378,19 @@ useSeoMeta({
 }
 
 .lightbox-img {
-  max-width: 100%;
-  max-height: 85vh;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: auto;
+  height: auto;
   object-fit: contain;
-  border-radius: 1rem;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 230, 167, 0.15);
   cursor: zoom-out;
+  transition: transform 0.3s ease;
 }
 
-/* Transitions */
+/* Lightbox Fade Transition */
 .lightbox-fade-enter-active,
 .lightbox-fade-leave-active {
   transition: opacity 0.3s ease;
@@ -401,5 +399,13 @@ useSeoMeta({
 .lightbox-fade-enter-from,
 .lightbox-fade-leave-to {
   opacity: 0;
+}
+
+.lightbox-fade-enter-active .lightbox-img {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lightbox-fade-enter-from .lightbox-img {
+  transform: scale(0.9);
 }
 </style>
