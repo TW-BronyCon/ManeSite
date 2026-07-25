@@ -70,6 +70,9 @@ const zoneEvents = computed(() => {
   if (!track) return [];
   return events
     .filter((e) => e.track === track)
+    .sort(
+      (a, b) => a.start.localeCompare(b.start) || a.end.localeCompare(b.end),
+    )
     .map((e) => {
       const rawColor = EVENT_COLORS[e.type];
       const bg = normalizeHexColor(rawColor);
@@ -1344,7 +1347,7 @@ onUnmounted(() => {
                               class="event-time"
                               :style="{ color: event.bg }"
                             >
-                              🕒 {{ event.start }} - {{ event.end }}
+                              {{ event.start }} - {{ event.end }}
                             </div>
                             <div class="event-title">{{ event.title }}</div>
                             <div v-if="event.detail" class="event-desc">
