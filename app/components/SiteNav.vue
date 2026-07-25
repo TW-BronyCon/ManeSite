@@ -454,6 +454,8 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
     right: 1rem;
 
     width: min(280px, calc(100vw - 2rem));
+    max-height: calc(100vh - 5.5rem);
+    overflow-y: auto;
 
     padding: 0.9rem;
 
@@ -518,6 +520,7 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
     opacity: 1;
     transform: none;
     pointer-events: auto;
+    visibility: visible;
 
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
