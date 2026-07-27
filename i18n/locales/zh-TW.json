@@ -73,7 +73,12 @@
     "viewDetailed": "詳細清單",
     "includes": "內含：",
     "closed": "已截止",
+    "onsite": "現場票",
+    "presale": "預售中",
     "royaleClosedBanner": "5000 NTD 貴賓票已截止",
+    "presaleNoticeBanner": "線上預售開放至 8/9 23:59 止（8/10 起現場票全票種調漲 NT$ 50）",
+    "royaleAndPresaleBanner": "5000 NTD 貴賓票已截止；其他票種線上預售開放至 8/9 23:59 止（8/10 起現場票調漲 NT$ 50）",
+    "onsiteNoticeBanner": "線上預售已截止，現場票（調漲 NT$ 50）可於活動現場報到櫃檯購買",
     "tiers": {
       "budget": "經濟票",
       "standard": "標準票",

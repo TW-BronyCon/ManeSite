@@ -17,18 +17,6 @@ definePageMeta({
 const route = useRoute();
 const siteUrl = "https://twbronycon.org";
 
-useSeoMeta({
-  title: () => t("ticket.title"),
-  ogTitle: () => t("ticket.title"),
-  twitterTitle: () => t("ticket.title"),
-  description: () => t("seo.description"),
-  ogDescription: () => t("seo.description"),
-  twitterDescription: () => t("seo.description"),
-  ogImage: `${siteUrl}/img/text-logo.avif`,
-  twitterImage: `${siteUrl}/img/text-logo.avif`,
-  ogUrl: computed(() => `${siteUrl}${route.path}`),
-});
-
 // Display mode state: 'detailed' view (cards) or 'table' view (comparison grid)
 const currentMode = ref<"detailed" | "table">("detailed");
 
@@ -48,7 +36,7 @@ const toggleMode = () => {
 const currentTime = ref(Date.now());
 const timeOffset = ref(0);
 
-const isTierClosed = (closeTimeStr?: string | null) => {
+const isAfterCloseTime = (closeTimeStr?: string | null) => {
   if (!closeTimeStr) return false;
   const now = new Date(currentTime.value + timeOffset.value);
   return now >= new Date(closeTimeStr);
@@ -82,8 +70,8 @@ onUnmounted(() => {
   if (statusTimer) clearInterval(statusTimer);
 });
 
-// Ticket tier configurations containing layout colors, graphic assets, and purchase forms
-const tiers = [
+// Ticket tier configurations containing layout colors, graphic assets, pricing, and purchase forms
+const rawTiers = [
   {
     id: "budget",
     color: "var(--color-tier-budget)",
@@ -91,7 +79,8 @@ const tiers = [
     img: "/img/B.avif",
     url: "https://go.twbronycon.org/ticket/budget",
     closeTime: "2026-08-09T23:59:59+08:00",
-    price: "NT$ 500",
+    presalePrice: 500,
+    onsitePrice: 550,
   },
   {
     id: "standard",
@@ -100,7 +89,8 @@ const tiers = [
     img: "/img/PU.avif",
     url: "https://go.twbronycon.org/ticket/standard",
     closeTime: "2026-08-09T23:59:59+08:00",
-    price: "NT$ 600",
+    presalePrice: 600,
+    onsitePrice: 650,
   },
   {
     id: "sponsor",
@@ -109,7 +99,8 @@ const tiers = [
     img: "/img/PI.avif",
     url: "https://go.twbronycon.org/ticket/sponsor",
     closeTime: "2026-08-09T23:59:59+08:00",
-    price: "NT$ 1,000",
+    presalePrice: 1000,
+    onsitePrice: 1050,
   },
   {
     id: "royale",
@@ -118,9 +109,75 @@ const tiers = [
     img: "/img/Y.avif",
     url: "https://go.twbronycon.org/ticket/royale",
     closeTime: "2026-06-30T23:59:59+08:00",
-    price: "NT$ 5,000",
+    presalePrice: 5000,
+    isRoyale: true,
   },
 ];
+
+const isGeneralPresaleEnded = computed(() => {
+  const budget = rawTiers.find((t) => t.id === "budget");
+  return budget ? isAfterCloseTime(budget.closeTime) : false;
+});
+
+const isRoyaleClosed = computed(() => {
+  const royale = rawTiers.find((t) => t.id === "royale");
+  return royale ? isAfterCloseTime(royale.closeTime) : false;
+});
+
+interface ProcessedTier {
+  id: string;
+  color: string;
+  subColor: string;
+  img: string;
+  url?: string;
+  closeTime: string;
+  presalePrice: number;
+  onsitePrice?: number;
+  isRoyale?: boolean;
+  isClosed: boolean;
+  isOnsite: boolean;
+  displayPrice: string;
+  originalPrice?: string;
+  futureOnsitePrice?: string;
+}
+
+const tiers = computed<ProcessedTier[]>(() => {
+  return rawTiers.map((tier) => {
+    const isClosed = isAfterCloseTime(tier.closeTime);
+
+    if (tier.isRoyale) {
+      return {
+        ...tier,
+        isClosed,
+        isOnsite: false,
+        displayPrice: `NT$ ${tier.presalePrice.toLocaleString()}`,
+        url: isClosed ? undefined : tier.url,
+      };
+    }
+
+    if (isClosed) {
+      const onsitePriceNum = tier.onsitePrice ?? tier.presalePrice + 50;
+      return {
+        ...tier,
+        isClosed: false,
+        isOnsite: true,
+        displayPrice: `NT$ ${onsitePriceNum.toLocaleString()}`,
+        originalPrice: `NT$ ${tier.presalePrice.toLocaleString()}`,
+        url: undefined,
+      };
+    }
+
+    const futurePriceNum = tier.onsitePrice ?? tier.presalePrice + 50;
+    return {
+      ...tier,
+      isClosed: false,
+      isOnsite: false,
+      displayPrice: `NT$ ${tier.presalePrice.toLocaleString()}`,
+      futureOnsitePrice: `NT$ ${futurePriceNum.toLocaleString()}`,
+      url: tier.url,
+    };
+  });
+});
 
 // Matrix mapping features to their availability across [budget, standard, sponsor, royale] tiers
 const featuresList = [
@@ -176,6 +233,18 @@ const onMouseLeave = () => {
   activeRowIndex.value = null;
   activeColIndex.value = null;
 };
+
+useSeoMeta({
+  title: () => t("ticket.title"),
+  ogTitle: () => t("ticket.title"),
+  twitterTitle: () => t("ticket.title"),
+  description: () => t("seo.description"),
+  ogDescription: () => t("seo.description"),
+  twitterDescription: () => t("seo.description"),
+  ogImage: `${siteUrl}/img/text-logo.avif`,
+  twitterImage: `${siteUrl}/img/text-logo.avif`,
+  ogUrl: computed(() => `${siteUrl}${route.path}`),
+});
 </script>
 
 <template>
@@ -186,15 +255,20 @@ const onMouseLeave = () => {
     </template>
 
     <template #surface>
-      <div
-        v-if="
-          isTierClosed(tiers.find((tier) => tier.id === 'royale')?.closeTime)
-        "
-        class="ticket-status-banner"
-      >
+      <!-- Status Notice Banner -->
+      <div v-if="isGeneralPresaleEnded" class="ticket-status-banner">
         <i class="fa-solid fa-circle-exclamation"></i>
-        <span>{{ $t("ticket.royaleClosedBanner") }}</span>
+        <span>{{ $t("ticket.onsiteNoticeBanner") }}</span>
       </div>
+      <div v-else-if="isRoyaleClosed" class="ticket-status-banner">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span>{{ $t("ticket.royaleAndPresaleBanner") }}</span>
+      </div>
+      <div v-else class="ticket-status-banner">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span>{{ $t("ticket.presaleNoticeBanner") }}</span>
+      </div>
+
       <div class="btn">
         <button class="sectionbtn" @click="toggleMode">
           {{
@@ -216,21 +290,25 @@ const onMouseLeave = () => {
           <a
             v-for="(tier, index) in tiers"
             :key="tier.id"
-            :href="isTierClosed(tier.closeTime) ? undefined : tier.url"
-            :target="isTierClosed(tier.closeTime) ? undefined : '_blank'"
+            :href="tier.isClosed || tier.isOnsite ? undefined : tier.url"
+            :target="tier.isClosed || tier.isOnsite ? undefined : '_blank'"
             class="block-link"
-            :class="{ 'is-disabled': isTierClosed(tier.closeTime) }"
-            :aria-disabled="isTierClosed(tier.closeTime)"
+            :class="{ 'is-disabled': tier.isClosed }"
+            :aria-disabled="tier.isClosed"
           >
             <div
               class="block"
               :style="{ color: tier.color }"
-              :class="{ 'is-closed': isTierClosed(tier.closeTime) }"
+              :class="{ 'is-closed': tier.isClosed }"
             >
-              <!-- Ribbon Banner for Royale card if closed -->
-              <div v-if="isTierClosed(tier.closeTime)" class="ribbon-closed">
+              <!-- Ribbon Banners -->
+              <div v-if="tier.isClosed" class="ribbon-closed">
                 <span>{{ $t("ticket.closed") }}</span>
               </div>
+              <div v-else-if="tier.isOnsite" class="ribbon-onsite">
+                <span>{{ $t("ticket.onsite") }}</span>
+              </div>
+
               <img
                 :src="tier.img"
                 :alt="$t(`ticket.tiers.${tier.id}`)"
@@ -257,7 +335,28 @@ const onMouseLeave = () => {
                   </div>
                 </div>
               </div>
-              <div class="ticket-price">{{ tier.price }}</div>
+              <div class="ticket-price">
+                <template v-if="tier.isOnsite">
+                  <span class="price-strike-line">
+                    <del>{{ tier.originalPrice }}</del>
+                  </span>
+                  <span class="price-main-line">
+                    {{ tier.displayPrice }}
+                    <span class="price-onsite-tag"
+                      >({{ $t("ticket.onsite") }})</span
+                    >
+                  </span>
+                </template>
+                <template v-else-if="!tier.isClosed && tier.futureOnsitePrice">
+                  <span class="price-strike-line">
+                    <del>{{ tier.futureOnsitePrice }}</del>
+                  </span>
+                  <span class="price-main-line">{{ tier.displayPrice }}</span>
+                </template>
+                <template v-else>
+                  <span class="price-main-line">{{ tier.displayPrice }}</span>
+                </template>
+              </div>
             </div>
           </a>
         </div>
@@ -283,7 +382,7 @@ const onMouseLeave = () => {
                     class="tier-head"
                     :class="{
                       'active-col': activeColIndex === index,
-                      'is-closed-col': isTierClosed(tier.closeTime),
+                      'is-closed-col': tier.isClosed,
                     }"
                     @mouseenter="onHeaderMouseEnter(index)"
                   >
@@ -315,7 +414,7 @@ const onMouseLeave = () => {
                       avail ? 'yes' : 'no',
                       {
                         'active-col': activeColIndex === cIndex,
-                        'is-closed-col': isTierClosed(tiers[cIndex]?.closeTime),
+                        'is-closed-col': tiers[cIndex]?.isClosed,
                       },
                     ]"
                     @mouseenter="onCellMouseEnter(rIndex, cIndex)"
@@ -612,9 +711,29 @@ const onMouseLeave = () => {
   position: relative;
   z-index: 1;
   margin-top: auto;
-  font-size: clamp(1.5rem, 2vw, 1.9rem);
-  line-height: 1.1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  line-height: 1.15;
+}
+
+.price-strike-line {
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0.6;
+  margin-bottom: 0.1rem;
+  color: var(--color-paper-text-muted);
+}
+
+.price-strike-line del {
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+}
+
+.price-main-line {
+  font-size: clamp(1.4rem, 1.8vw, 1.85rem);
   white-space: nowrap;
   font-weight: 1000;
   color: color-mix(in srgb, currentColor 72%, #7a5626 28%);
@@ -1050,6 +1169,30 @@ const onMouseLeave = () => {
   animation: fadeIn 0.4s ease-out;
 }
 
+/* ===== Expired Ticket Banner & Ribbon ===== */
+.ticket-status-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 0 auto 1.5rem;
+  padding: 0.75rem 1.5rem;
+  width: fit-content;
+  max-width: 90%;
+  background: linear-gradient(
+    135deg,
+    rgba(183, 28, 28, 0.35),
+    rgba(127, 0, 0, 0.45)
+  );
+  border: 1px solid rgba(211, 47, 47, 0.5);
+  border-radius: 0.75rem;
+  color: #ffcdd2;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  animation: fadeIn 0.4s ease-out;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -1076,6 +1219,30 @@ const onMouseLeave = () => {
   z-index: 10;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.ribbon-onsite {
+  position: absolute;
+  top: 1.2rem;
+  right: -2.6rem;
+  background: linear-gradient(135deg, #e65100, #bf360c);
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  padding: 0.15rem 2.8rem;
+  transform: rotate(45deg);
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.price-onsite-tag {
+  font-size: 0.75em;
+  font-weight: 700;
+  margin-left: 0.35em;
+  opacity: 0.85;
 }
 
 .block-link.is-disabled {

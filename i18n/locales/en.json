@@ -73,7 +73,12 @@
     "viewDetailed": "Detailed List",
     "includes": "Includes: ",
     "closed": "Closed",
+    "onsite": "On-site",
+    "presale": "Pre-sale",
     "royaleClosedBanner": "5000 NTD Royale ticket: Sales Closed",
+    "presaleNoticeBanner": "Online pre-sale ends August 9 at 23:59 (+NT$50 for on-site tickets starting August 10).",
+    "royaleAndPresaleBanner": "5000 NTD Royale ticket: Sales Closed. Other tiers online pre-sale open until Aug 9 23:59 (+NT$50 on-site).",
+    "onsiteNoticeBanner": "Online pre-sales have ended. On-site tickets (+NT$50) are available at the event check-in counter.",
     "tiers": {
       "budget": "Budget",
       "standard": "Standard",
