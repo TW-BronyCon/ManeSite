@@ -159,26 +159,26 @@ export const events: TimetableEvent[] = [
     id: "pony-still-challenge",
     title: { zh: "劇照大挑戰", en: "Pony Still Challenge" },
     track: "main",
-    start: "15:00",
-    end: "15:45",
+    start: "14:15",
+    end: "15:00",
     type: "community",
     detail: {
       zh: "桃漪考考你有沒有認真觀看關於她來自的世界的動畫，你能否根據一張畫面就能猜出是劇中哪一集嗎?",
       en: "Peach Ripple wants to test your knowledge of the world where she came from! Can you guess the episode just by looking at a single screenshot?",
     },
   },
-  {
-    id: "pony-trivia-challenge",
-    title: { zh: "小馬知識大挑戰", en: "Pony Trivia Challenge" },
-    track: "main",
-    start: "14:15",
-    end: "15:00",
-    type: "community",
-    detail: {
-      zh: "考驗大家對彩虹小馬世界的了解程度，從角色、劇情到冷知識，看看誰才是真正的小馬百科。",
-      en: "Test your knowledge of the MLP world, from characters and stories to fun trivia.",
-    },
-  },
+  // {
+  //   id: "pony-trivia-challenge",
+  //   title: { zh: "小馬知識大挑戰", en: "Pony Trivia Challenge" },
+  //   track: "main",
+  //   start: "14:15",
+  //   end: "15:00",
+  //   type: "community",
+  //   detail: {
+  //     zh: "考驗大家對彩虹小馬世界的了解程度，從角色、劇情到冷知識，看看誰才是真正的小馬百科。",
+  //     en: "Test your knowledge of the MLP world, from characters and stories to fun trivia.",
+  //   },
+  // },
   {
     id: "friendship-sinks",
     title: {
@@ -186,7 +186,7 @@ export const events: TimetableEvent[] = [
       en: "The boat of friendship sinks when least expected",
     },
     track: "social",
-    start: "16:30",
+    start: "16:00",
     end: "18:00",
     type: "social-event",
     detail: {
@@ -198,8 +198,8 @@ export const events: TimetableEvent[] = [
     id: "translation-chaos",
     title: { zh: "友誼就是翻譯災難", en: "Friendship Is Translation Chaos" },
     track: "main",
-    start: "15:45",
-    end: "16:30",
+    start: "15:00",
+    end: "15:45",
     type: "community",
     detail: {
       zh: "歌曲翻譯總是困難重重，你能根據隨便翻譯的歌詞猜出是哪一首歌嗎?",
@@ -259,7 +259,7 @@ export const events: TimetableEvent[] = [
     id: "workshop-open",
     title: { zh: "工坊區開放", en: "Workshop Open" },
     track: "workshop",
-    start: "10:00",
+    start: "10:30",
     end: "17:00",
     type: "workshop",
     detail: {
@@ -271,7 +271,7 @@ export const events: TimetableEvent[] = [
     id: "vendorStreet",
     title: { zh: "攤位街", en: "Vendor Area" },
     track: "vendor",
-    start: "10:00",
+    start: "10:30",
     end: "17:00",
     type: "vendor",
     detail: {
@@ -283,8 +283,8 @@ export const events: TimetableEvent[] = [
     id: "social-area",
     title: { zh: "交誼區", en: "Social Area" },
     track: "social",
-    start: "10:00",
-    end: "16:30",
+    start: "10:30",
+    end: "16:00",
     type: "social",
     detail: {
       zh: "擁有大桌及椅子的區域，可以和其他參加者一起聊天或玩各種桌遊與互動遊戲。",
