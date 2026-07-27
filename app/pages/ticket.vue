@@ -90,7 +90,7 @@ const tiers = [
     subColor: "var(--color-tier-budget-sub)",
     img: "/img/B.avif",
     url: "https://go.twbronycon.org/ticket/budget",
-    closeTime: "2026-07-26T23:59:59+08:00",
+    closeTime: "2026-08-09T23:59:59+08:00",
     price: "NT$ 500",
   },
   {
@@ -99,7 +99,7 @@ const tiers = [
     subColor: "var(--color-tier-standard-sub)",
     img: "/img/PU.avif",
     url: "https://go.twbronycon.org/ticket/standard",
-    closeTime: "2026-07-26T23:59:59+08:00",
+    closeTime: "2026-08-09T23:59:59+08:00",
     price: "NT$ 600",
   },
   {
@@ -108,7 +108,7 @@ const tiers = [
     subColor: "var(--color-tier-sponsor-sub)",
     img: "/img/PI.avif",
     url: "https://go.twbronycon.org/ticket/sponsor",
-    closeTime: "2026-07-26T23:59:59+08:00",
+    closeTime: "2026-08-09T23:59:59+08:00",
     price: "NT$ 1,000",
   },
   {
