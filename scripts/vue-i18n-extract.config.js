@@ -8,6 +8,8 @@ export const exclude = [
   "home.footer.logoAlt",
   "tickets.tiers",
   "ticket.descriptions",
+  "ticket.presale",
+  "ticket.royaleClosedBanner",
   "ticket.features",
   "ticket.tiers",
   "venue.legend",
