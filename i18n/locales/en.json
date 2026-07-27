@@ -134,7 +134,9 @@
   },
   "apply": {
     "volunteer": "Volunteer",
+    "volunteerClosed": "Volunteer (Closed)",
     "vendor": "Vendor",
+    "vendorClosed": "Vendor (Closed)",
     "event": "Event (Closed)"
   },
   "newsPage": {

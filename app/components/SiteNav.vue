@@ -1,10 +1,21 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 
 const localePath = useLocalePath();
 
 const isNavOpen = ref(false);
 const openSubmenu = ref<string | null>(null);
+
+const currentTime = ref(Date.now());
+let timer: ReturnType<typeof setInterval> | null = null;
+
+const VOLUNTEER_CLOSE_TIME = new Date("2026-07-26T23:59:59+08:00").getTime();
+const BOOTH_CLOSE_TIME = new Date("2026-08-02T23:59:59+08:00").getTime();
+
+const isVolunteerClosed = computed(
+  () => currentTime.value >= VOLUNTEER_CLOSE_TIME,
+);
+const isVendorClosed = computed(() => currentTime.value >= BOOTH_CLOSE_TIME);
 
 const toggleNav = () => {
   isNavOpen.value = !isNavOpen.value;
@@ -23,8 +34,18 @@ const closeMenus = (e: MouseEvent) => {
   }
 };
 
-onMounted(() => document.addEventListener("click", closeMenus));
-onUnmounted(() => document.removeEventListener("click", closeMenus));
+onMounted(() => {
+  document.addEventListener("click", closeMenus);
+  currentTime.value = Date.now();
+  timer = setInterval(() => {
+    currentTime.value = Date.now();
+  }, 1000);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", closeMenus);
+  if (timer) clearInterval(timer);
+});
 </script>
 
 <template>
@@ -96,7 +117,11 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
           :aria-hidden="openSubmenu !== 'apply'"
         >
           <li>
+            <span v-if="isVolunteerClosed" class="submenu-disabled">{{
+              $t("apply.volunteerClosed")
+            }}</span>
             <a
+              v-else
               href="https://go.twbronycon.org/volunteer"
               target="_blank"
               rel="noopener noreferrer"
@@ -104,7 +129,11 @@ onUnmounted(() => document.removeEventListener("click", closeMenus));
             >
           </li>
           <li>
+            <span v-if="isVendorClosed" class="submenu-disabled">{{
+              $t("apply.vendorClosed")
+            }}</span>
             <a
+              v-else
               href="https://go.twbronycon.org/vendor"
               target="_blank"
               rel="noopener noreferrer"
