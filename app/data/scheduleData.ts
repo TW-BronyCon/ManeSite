@@ -198,8 +198,8 @@ export const events: TimetableEvent[] = [
     id: "translation-chaos",
     title: { zh: "友誼就是翻譯災難", en: "Friendship Is Translation Chaos" },
     track: "main",
-    start: "15:00",
-    end: "15:45",
+    start: "15:10",
+    end: "15:55",
     type: "community",
     detail: {
       zh: "歌曲翻譯總是困難重重，你能根據隨便翻譯的歌詞猜出是哪一首歌嗎?",
