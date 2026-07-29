@@ -260,7 +260,7 @@ export const events: TimetableEvent[] = [
     title: { zh: "工坊區開放", en: "Workshop Open" },
     track: "workshop",
     start: "10:30",
-    end: "17:00",
+    end: "17:30",
     type: "workshop",
     detail: {
       zh: "提供紙跟色彩筆，可以自由畫畫的地方。",
@@ -272,7 +272,7 @@ export const events: TimetableEvent[] = [
     title: { zh: "攤位街", en: "Vendor Area" },
     track: "vendor",
     start: "10:30",
-    end: "17:00",
+    end: "17:30",
     type: "vendor",
     detail: {
       zh: "攤位街開放，可以逛創作攤位、收藏周邊，支持喜歡的創作者。",
