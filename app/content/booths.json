@@ -45,7 +45,9 @@
       "en": "A famous Taiwanese MLP artist, thick-painting style, M6 or main character charms, badges, autograph boards, tablecloths, mousepads."
     },
     "image": "/img/booths/booth-2.webp",
-    "images": ["/img/booths/booth-2.webp"],
+    "images": [
+      "/img/booths/booth-2.webp"
+    ],
     "links": [
       {
         "label": "Website",
@@ -81,7 +83,9 @@
       "en": "Badges, towels, stickers; M6, chibi version, rock version."
     },
     "image": "/img/booths/booth-3.webp",
-    "images": ["/img/booths/booth-3.webp"],
+    "images": [
+      "/img/booths/booth-3.webp"
+    ],
     "links": [
       {
         "label": "Instagram",
@@ -102,7 +106,9 @@
       "en": "Fanfiction booklets, postcard sets, and bookmark collections inspired by Equestria."
     },
     "image": "/img/booths/booth-4.webp",
-    "images": ["/img/booths/booth-4.webp"],
+    "images": [
+      "/img/booths/booth-4.webp"
+    ],
     "links": [
       {
         "label": "DeviantArt",
@@ -136,6 +142,25 @@
         "label": "Website",
         "url": "https://cloud-harbor.org",
         "icon": "fa-solid fa-globe"
+      }
+    ]
+  },
+  {
+    "id": "booth-7",
+    "mapId": "7",
+    "name": {
+      "zh": "",
+      "en": ""
+    },
+    "introduction": {
+      "zh": "彩虹小馬閃光郵票抽獎包\n絕版官方吊飾、印章盲包",
+      "en": "My Little Pony shiny stamp lottery packs\nOut-of-print official charms, stamp blind bags"
+    },
+    "links": [
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/share/19KHZPZ846/?mibextid=wwXIfr",
+        "icon": "fa-brands fa-facebook"
       }
     ]
   }
