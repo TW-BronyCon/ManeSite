@@ -140,16 +140,18 @@
     ]
   },
   {
-    "id": "booth-7",
+    "id": "equestria-postal",
     "mapId": "7",
     "name": {
-      "zh": "",
-      "en": ""
+      "zh": "艾奎斯垂雅郵政",
+      "en": "Equestria Postal"
     },
     "introduction": {
       "zh": "彩虹小馬閃光郵票抽獎包\n絕版官方吊飾、印章盲包",
       "en": "My Little Pony shiny stamp lottery packs\nOut-of-print official charms, stamp blind bags"
     },
+    "image": "/img/booths/booth-6.avif",
+    "images": ["/img/booths/booth-6.avif"],
     "links": [
       {
         "label": "Facebook",
