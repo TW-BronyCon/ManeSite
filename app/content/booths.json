@@ -77,16 +77,16 @@
       "en": "YeeJay's Art"
     },
     "introduction": {
-      "zh": "徽章、毛巾、貼紙；M6、Q版、搖滾版",
-      "en": "Badges, towels, stickers; M6, chibi version, rock version."
+      "zh": "喜歡可愛生物的畫圖聽團仔——藝潔\n「ROCK IS MAGIC」聽團仔M6運動毛巾＆防水貼紙\n短腿小馬的徽章＆圖鑑貼紙！",
+      "en": "An artist who loves drawing cute creatures — YeeJay.\n 'ROCK IS MAGIC' M6 event sports towels & waterproof stickers\nshort-legged pony badges & illustrated sticker sheets!"
     },
-    "image": "/img/booths/booth-3.webp",
-    "images": ["/img/booths/booth-3.webp"],
+    "image": "/img/booths/booth-3.avif",
+    "images": ["/img/booths/booth-3.avif"],
     "links": [
       {
-        "label": "Instagram",
-        "url": "https://www.instagram.com/yeejay14?igsh=dzYwb2VmZzF4Nmgw",
-        "icon": "fa-brands fa-instagram"
+        "label": "Website",
+        "url": "https://yeejay.carrd.co/",
+        "icon": "fa-solid fa-globe"
       }
     ]
   },
