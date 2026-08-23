@@ -1,7 +1,7 @@
 [
   {
     "id": "group-photo",
-    "url": "/img/gallary/26/twbc2026.png",
+    "url": "/img/gallary/26/twbc2026.avif",
     "title": {
       "zh": "大合照",
       "en": "Group Photo"
@@ -13,7 +13,7 @@
   },
   {
     "id": "gallery-img-0866",
-    "url": "/img/gallary/26/IMG_0866.jpeg",
+    "url": "/img/gallary/26/IMG_0866.avif",
     "title": {
       "zh": "主舞台精彩表演",
       "en": "Main Stage Performance"
@@ -25,7 +25,7 @@
   },
   {
     "id": "gallery-img-1077",
-    "url": "/img/gallary/26/IMG_1077.JPG",
+    "url": "/img/gallary/26/IMG_1077.avif",
     "title": {
       "zh": "創作者攤位交流",
       "en": "Creator Booth Interactions"
@@ -37,7 +37,7 @@
   },
   {
     "id": "gallery-img-1124",
-    "url": "/img/gallary/26/IMG_1124.JPG",
+    "url": "/img/gallary/26/IMG_1124.avif",
     "title": {
       "zh": "大會紀念周邊與識別證",
       "en": "Event Souvenirs & Badges"
@@ -49,7 +49,7 @@
   },
   {
     "id": "gallery-img-1136",
-    "url": "/img/gallary/26/IMG_1136.JPG",
+    "url": "/img/gallary/26/IMG_1136.avif",
     "title": {
       "zh": "社群交誼歡樂時光",
       "en": "Community Social Gathering"
@@ -61,7 +61,7 @@
   },
   {
     "id": "gallery-img-1157",
-    "url": "/img/gallary/26/IMG_1157.JPG",
+    "url": "/img/gallary/26/IMG_1157.avif",
     "title": {
       "zh": "麒麟創作工坊",
       "en": "Kirin Art Workshop"
@@ -73,7 +73,7 @@
   },
   {
     "id": "gallery-img-8565",
-    "url": "/img/gallary/26/IMG_8565.jpeg",
+    "url": "/img/gallary/26/IMG_8565.avif",
     "title": {
       "zh": "夜場音樂派對狂歡",
       "en": "Late Night Music Party"
@@ -85,7 +85,7 @@
   },
   {
     "id": "gallery-img-8636",
-    "url": "/img/gallary/26/IMG_8636.jpeg",
+    "url": "/img/gallary/26/IMG_8636.avif",
     "title": {
       "zh": "大合唱溫馨尾聲",
       "en": "Group Sing-along Finale"
