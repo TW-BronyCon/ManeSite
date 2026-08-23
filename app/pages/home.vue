@@ -1,23 +1,12 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { galleryPhotos } from "~/data/galleryData";
 
-const { t, locale } = useI18n();
+const { locale } = useI18n();
 const localePath = useLocalePath();
+const isEn = computed(() => locale.value.startsWith("en"));
 
-// ---------- Controllers ----------
-const { countdownMsg, days, hours, minutes, seconds } = useCountdown(
-  "2026-08-15T09:30:00+08:00",
-  "2026-08-15T21:00:00+08:00",
-);
-
-const translatedCountdownMsg = computed(() => {
-  if (!countdownMsg.value) return "";
-  return t(`home.countdown.${countdownMsg.value}`);
-});
-
-const formatNumber = (num: number): string => {
-  return String(num).padStart(2, "0");
-};
+const previewPhotos = computed(() => galleryPhotos.slice(0, 4));
 </script>
 
 <template>
@@ -37,73 +26,55 @@ const formatNumber = (num: number): string => {
           <span class="time-addon">09:30 (GMT+8)</span>
         </div>
 
-        <div class="countdown-area">
-          <div v-if="!countdownMsg" class="count-title">
-            {{ $t("home.countdown.title") }}
-          </div>
-          <div class="countdown">
-            <span v-if="translatedCountdownMsg" class="countdown-message">{{
-              translatedCountdownMsg
-            }}</span>
-            <template v-else>
-              <div v-if="days > 0" class="countdown-card">
-                <div class="countdown-number-wrapper">
-                  <Transition name="digit-slide">
-                    <span :key="days" class="countdown-number">{{
-                      formatNumber(days)
-                    }}</span>
-                  </Transition>
-                </div>
-                <span class="countdown-label">{{
-                  $t("home.countdown.days")
-                }}</span>
-              </div>
-              <div v-if="days > 0 || hours > 0" class="countdown-card">
-                <div class="countdown-number-wrapper">
-                  <Transition name="digit-slide">
-                    <span :key="hours" class="countdown-number">{{
-                      formatNumber(hours)
-                    }}</span>
-                  </Transition>
-                </div>
-                <span class="countdown-label">{{
-                  $t("home.countdown.hours")
-                }}</span>
-              </div>
-              <div
-                v-if="days > 0 || hours > 0 || minutes > 0"
-                class="countdown-card"
-              >
-                <div class="countdown-number-wrapper">
-                  <Transition name="digit-slide">
-                    <span :key="minutes" class="countdown-number">{{
-                      formatNumber(minutes)
-                    }}</span>
-                  </Transition>
-                </div>
-                <span class="countdown-label">{{
-                  $t("home.countdown.minutes")
-                }}</span>
-              </div>
-              <div class="countdown-card">
-                <div class="countdown-number-wrapper">
-                  <Transition name="digit-slide">
-                    <span :key="seconds" class="countdown-number">{{
-                      formatNumber(seconds)
-                    }}</span>
-                  </Transition>
-                </div>
-                <span class="countdown-label">{{
-                  $t("home.countdown.seconds")
-                }}</span>
-              </div>
-            </template>
-          </div>
+        <div class="thank-you-area">
+          <h2 class="thank-you-title">{{ $t("home.thankYou.title") }}</h2>
+          <p class="thank-you-text">{{ $t("home.thankYou.subtitle") }}</p>
+          <NuxtLink class="gallery-btn" :to="localePath('/gallery')">
+            <i class="fa-solid fa-images"></i>
+            <span>{{ $t("home.thankYou.viewGallery") }}</span>
+          </NuxtLink>
         </div>
+      </section>
 
-        <NuxtLink class="buy-btn" :to="localePath('/ticket')">{{
-          $t("menu.ticket")
-        }}</NuxtLink>
+      <!-- Gallery Highlights Preview -->
+      <section
+        v-if="previewPhotos.length > 0"
+        class="info-card gallery-preview-card"
+      >
+        <h2>{{ $t("home.galleryPreview.title") }}</h2>
+        <p class="gallery-preview-subtitle">
+          {{ $t("home.galleryPreview.subtitle") }}
+        </p>
+        <div class="gallery-preview-grid">
+          <NuxtLink
+            v-for="photo in previewPhotos"
+            :key="photo.id"
+            :to="localePath('/gallery')"
+            class="preview-item"
+          >
+            <div class="preview-img-wrapper">
+              <img
+                :src="photo.url"
+                :alt="photo.title[isEn ? 'en' : 'zh']"
+                class="preview-img"
+                loading="lazy"
+                width="300"
+                height="200"
+              />
+              <div class="preview-overlay">
+                <span class="preview-title">{{
+                  photo.title[isEn ? "en" : "zh"]
+                }}</span>
+              </div>
+            </div>
+          </NuxtLink>
+        </div>
+        <div class="gallery-preview-actions">
+          <NuxtLink class="gallery-btn secondary" :to="localePath('/gallery')">
+            <span>{{ $t("home.thankYou.viewGallery") }}</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </NuxtLink>
+        </div>
       </section>
 
       <section class="info-card">
@@ -232,95 +203,172 @@ const formatNumber = (num: number): string => {
   font-size: clamp(1.5em, 3.5vw, 1.75em);
 }
 
-/* Countdown */
-.countdown {
-  display: flex;
-  justify-content: center;
-  gap: clamp(0.5rem, 2vw, 1.25rem);
-  flex-wrap: wrap;
-  margin: 0;
-}
-
-.countdown-card {
-  padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1.25rem);
-  min-width: clamp(4.25rem, 11vw, 5.5rem);
+/* Thank You Area */
+.thank-you-area {
+  margin: 2rem auto;
+  max-width: 650px;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  background: rgba(20, 10, 25, 0.45);
+  border: 1px solid rgba(255, 230, 167, 0.15);
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition:
-    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    border-color 0.3s,
-    box-shadow 0.3s;
-  opacity: 0;
+  gap: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-.countdown-card:nth-child(1) {
-  animation-delay: 0.1s;
-}
-.countdown-card:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.countdown-card:nth-child(3) {
-  animation-delay: 0.3s;
-}
-.countdown-card:nth-child(4) {
-  animation-delay: 0.4s;
+.thank-you-title {
+  margin: 0;
+  font-size: clamp(1.4rem, 3.2vw, 1.8rem);
+  color: var(--color-gold);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  font-weight: 700;
 }
 
-.countdown-number-wrapper {
-  position: relative;
-  overflow: hidden;
-  height: clamp(2rem, 5vw, 2.75rem);
+.thank-you-text {
+  margin: 0;
+  font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+/* Gallery Buttons */
+.gallery-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.75rem;
+  color: #120b18;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1.1rem;
+  background: linear-gradient(135deg, var(--color-gold), #e2b866);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(255, 230, 167, 0.3);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.gallery-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 230, 167, 0.5);
+  background: linear-gradient(135deg, #fff2cc, var(--color-gold));
+}
+
+.gallery-btn:active {
+  transform: translateY(0);
+}
+
+.gallery-btn.secondary {
+  background: transparent;
+  color: var(--color-gold);
+  border: 1px solid var(--color-gold);
+  box-shadow: none;
+  margin-top: 0.5rem;
+}
+
+.gallery-btn.secondary:hover {
+  background: rgba(255, 230, 167, 0.1);
+  color: var(--color-gold);
+}
+
+/* Gallery Preview Section */
+.gallery-preview-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.gallery-preview-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.05rem;
+  margin: 0 0 1.5rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.gallery-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
   width: 100%;
+  margin-bottom: 1.5rem;
 }
 
-.countdown-number {
+.preview-item {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 230, 167, 0.1);
+  aspect-ratio: 3 / 2;
+  position: relative;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  background: #000;
+}
+
+.preview-img-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.preview-overlay {
   position: absolute;
   inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(18, 11, 24, 0.8) 10%,
+    rgba(18, 11, 24, 0.1) 60%
+  );
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
-  font-weight: 700;
-  color: var(--color-gold);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
+  padding: 0.75rem;
+  opacity: 0.9;
+  transition: all 0.3s ease;
 }
 
-.countdown-label {
-  font-size: clamp(0.7rem, 1.8vw, 0.85rem);
-  color: var(--color-pink);
-  margin-top: 0.25rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
+.preview-title {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
-.countdown-message {
-  display: inline-block;
-  text-align: center;
-  font-size: clamp(1.5em, 3.5vw, 2em);
-  color: var(--color-pink);
+.preview-item:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-gold);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
-/* Animations */
-.digit-slide-enter-active,
-.digit-slide-leave-active {
-  transition:
-    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity 0.4s ease;
+.preview-item:hover .preview-img {
+  transform: scale(1.05);
 }
 
-.digit-slide-enter-from {
-  transform: translateY(-100%);
-  opacity: 0;
+.preview-item:hover .preview-overlay {
+  opacity: 1;
+  background: rgba(18, 11, 24, 0.4);
+  align-items: center;
 }
 
-.digit-slide-leave-to {
-  transform: translateY(100%);
-  opacity: 0;
+.gallery-preview-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 @keyframes fadeInUp {
@@ -332,39 +380,6 @@ const formatNumber = (num: number): string => {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* Buy Button */
-.buy-btn {
-  display: inline-block;
-  margin: clamp(0.5em, 2cqw, 1.25em) 0 clamp(1.5em, 4cqw, 2.25em);
-  padding: clamp(0.6em, 1.5cqw, 0.75em) clamp(1.2em, 3cqw, 2em);
-  color: var(--color-text-light);
-  font-weight: bold;
-  text-decoration: none;
-  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.25);
-  font-size: clamp(1em, 2.2cqw, 1.3em);
-  background: linear-gradient(150deg, #a77cb8, #885f9c);
-  border-radius: clamp(0.3em, 1.8cqw, 0.6em);
-  box-shadow:
-    0 0.15em 0.5em rgba(0, 0, 0, 0.15),
-    0 0.2em 0.8em rgba(120, 90, 140, 0.43);
-  transition: all 0.2s ease-out;
-}
-
-.buy-btn:hover {
-  transform: translateY(-0.1em) scale(1.01);
-  background: linear-gradient(135deg, #956fb8, #8a5dae);
-  text-shadow: none;
-}
-
-.buy-btn:active {
-  background: #a26b93;
-  transform: translateY(0) scale(0.98);
-  box-shadow:
-    0 0.1em 0.4em rgba(0, 0, 0, 0.3),
-    inset 0 0.2em 0.5em rgba(0, 0, 0, 0.3);
-  text-shadow: 0 3px 7px rgba(0, 0, 0, 0.5);
 }
 
 /* Info Card */
@@ -452,8 +467,9 @@ const formatNumber = (num: number): string => {
     margin-bottom: 2.5em;
   }
 
-  .countdown {
-    margin: 0.25em 0 0.75em 0;
+  .gallery-preview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
   }
 
   .info-card {
