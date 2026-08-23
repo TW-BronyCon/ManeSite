@@ -14,22 +14,6 @@ const handleLocaleSwitch = (code: string, event: MouseEvent) => {
   }
 };
 
-const partners = [
-  {
-    name: "TWBC",
-    logo: "/img/text-logo-clear.avif",
-    url: "/",
-    internal: true,
-    altKey: "home.footer.logoAlt",
-  },
-  // {
-  //   name: 'Future Con',
-  //   logo: '/img/text-logo-clear.avif',
-  //   url: 'https://example.com',
-  //   internal: false
-  // }
-];
-
 // Quote Logic
 const quotes = computed(() => {
   // Method 1: Try tm (translated message)
@@ -82,33 +66,7 @@ const { currentQuote, isQuoteFadingOut } = useQuotes(
     <div class="footer-container">
       <div class="footer-top">
         <div class="footer-brand">
-          <div class="footer-logos">
-            <template v-for="partner in partners" :key="partner.name">
-              <NuxtLink v-if="partner.internal" :to="localePath(partner.url)">
-                <img
-                  :src="partner.logo"
-                  :alt="partner.altKey ? $t(partner.altKey) : partner.name"
-                  class="footer-logo"
-                  width="2362"
-                  height="1816"
-                />
-              </NuxtLink>
-              <a
-                v-else
-                :href="partner.url"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  :src="partner.logo"
-                  :alt="partner.name"
-                  class="footer-logo"
-                  width="2362"
-                  height="1816"
-                />
-              </a>
-            </template>
-          </div>
+          <PartnerLinks />
 
           <div class="footer-lang-switcher">
             <NuxtLink
@@ -164,6 +122,14 @@ const { currentQuote, isQuoteFadingOut } = useQuotes(
             aria-label="Instagram"
             class="social-icon instagram"
             ><i class="fa-brands fa-instagram"></i
+          ></a>
+          <a
+            href="https://github.com/TW-BronyCon/ManeSite/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            class="social-icon github"
+            ><i class="fa-brands fa-github"></i
           ></a>
           <a
             href="mailto:twbronycon2@gmail.com"
@@ -230,19 +196,6 @@ const { currentQuote, isQuoteFadingOut } = useQuotes(
   gap: 0.5rem;
 }
 
-.footer-logos {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.footer-logo {
-  height: 3rem;
-  width: auto;
-  object-fit: contain;
-}
-
 .footer-lang-switcher {
   display: flex;
   gap: 1rem;
@@ -306,6 +259,9 @@ const { currentQuote, isQuoteFadingOut } = useQuotes(
 }
 .social-icon.instagram:hover {
   color: #e4405f;
+}
+.social-icon.github:hover {
+  color: #b6a7cda3;
 }
 
 .footer-divider {
