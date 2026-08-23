@@ -403,7 +403,15 @@ useSeoMeta({
   background: var(--color-gold);
   color: #120b18;
   border-color: var(--color-gold);
+}
+
+.lightbox-close:hover {
   transform: scale(1.1);
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+  transform: translateY(-50%) scale(1.1);
 }
 
 .lightbox-close {
