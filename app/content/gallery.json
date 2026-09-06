@@ -12,18 +12,6 @@
     }
   },
   {
-    "id": "gallery-img-0866",
-    "url": "/img/gallary/26/IMG_0866.avif",
-    "title": {
-      "zh": "主舞台精彩表演",
-      "en": "Main Stage Performance"
-    },
-    "description": {
-      "zh": "主舞台精彩的現場表演與同好們的熱情響應。",
-      "en": "The energetic crowd cheering during the live stage performances."
-    }
-  },
-  {
     "id": "gallery-img-1077",
     "url": "/img/gallary/26/IMG_1077.avif",
     "title": {
@@ -39,7 +27,7 @@
     "id": "gallery-img-1124",
     "url": "/img/gallary/26/IMG_1124.avif",
     "title": {
-      "zh": "大會紀念周邊與識別證",
+      "zh": "",
       "en": "Event Souvenirs & Badges"
     },
     "description": {
@@ -74,6 +62,18 @@
   {
     "id": "gallery-img-8565",
     "url": "/img/gallary/26/IMG_8565.avif",
+    "title": {
+      "zh": "主舞台精彩猜謎活動",
+      "en": "Main Stage Trivia Event"
+    },
+    "description": {
+      "zh": "夜場「彩虹音爆」派對中，DJ帶來節奏強烈的小馬混音舞曲狂歡。",
+      "en": ""
+    }
+  },
+  {
+    "id": "gallery-img-0866",
+    "url": "/img/gallary/26/IMG_0866.avif",
     "title": {
       "zh": "夜場音樂派對狂歡",
       "en": "Late Night Music Party"
