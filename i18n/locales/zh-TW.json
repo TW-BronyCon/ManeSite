@@ -64,7 +64,16 @@
       "「友情不總是簡單，但值得去守護。」- Twilight Sparkle",
       "「派對是交朋友最棒的方法！」- Pinkie Pie"
     ],
-    "quotesLoading": "讀取中..."
+    "quotesLoading": "讀取中...",
+    "thankYou": {
+      "title": "Taiwan BronyCon 2026圓滿落幕！",
+      "subtitle": "衷心感謝所有前來參與的同好、攤主、工作人員與合作夥伴。有你們的支持與陪伴，才讓這場盛會如此璀璨。願在此建立的友誼與回憶，化作溫暖的光芒永遠伴隨大家！",
+      "viewGallery": "瀏覽精選相片"
+    },
+    "galleryPreview": {
+      "title": "大會回顧剪影",
+      "subtitle": "重溫Taiwan BronyCon 2026的精彩瞬間與溫馨畫面。"
+    }
   },
   "ticket": {
     "title": "票種",
@@ -125,7 +134,8 @@
     "schedule": "時程表",
     "venue": "場地資訊",
     "transport": "交通指南",
-    "booths": "攤位"
+    "booths": "攤位",
+    "gallery": "活動相簿"
   },
   "tba": {
     "about": "關於我們(即將公佈)",
@@ -342,5 +352,14 @@
       "media": "媒體與合作邀約",
       "other": "其他事項"
     }
+  },
+  "gallery": {
+    "title": "活動相簿",
+    "subtitle": "紀錄TWBC 2026現場的創作熱情與友誼魔法",
+    "backHome": "返回首頁",
+    "noPhotos": "未找到相片。",
+    "prev": "上一張",
+    "next": "下一張",
+    "imageCounter": "第{current}張，共{total}張"
   }
 }

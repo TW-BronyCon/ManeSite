@@ -1,0 +1,98 @@
+[
+  {
+    "id": "gallery-img-1077",
+    "url": "/img/gallary/26/IMG_1077.avif",
+    "title": {
+      "zh": "主舞台精彩猜謎活動",
+      "en": "Main Stage Trivia Event"
+    },
+    "description": {
+      "zh": "",
+      "en": ""
+    }
+  },
+  {
+    "id": "gallery-img-1124",
+    "url": "/img/gallary/26/IMG_1124.avif",
+    "title": {
+      "zh": "",
+      "en": "Event Souvenirs & Badges"
+    },
+    "description": {
+      "zh": "大會精美設計的識別證、紀念徽章與活動限定商品。",
+      "en": "A close-up of the beautifully designed TWBC badges and official souvenirs."
+    }
+  },
+  {
+    "id": "gallery-img-8565",
+    "url": "/img/gallary/26/IMG_8565.avif",
+    "title": {
+      "zh": "創作者攤位交流",
+      "en": "Creator Booth Interactions"
+    },
+    "description": {
+      "zh": "同好們在創作者攤位前熱烈交流與選購精美周邊。",
+      "en": "Attendees browsing and chatting with local brony creators at their booths."
+    }
+  },
+  {
+    "id": "gallery-img-1136",
+    "url": "/img/gallary/26/IMG_1136.avif",
+    "title": {
+      "zh": "社群交誼歡樂時光",
+      "en": "Community Social Gathering"
+    },
+    "description": {
+      "zh": "同好們在交誼區聊天、玩桌遊並結識志同道合的新朋友。",
+      "en": "Bronies playing tabletop games and making new friends in the social area."
+    }
+  },
+  {
+    "id": "gallery-img-1157",
+    "url": "/img/gallary/26/IMG_1157.avif",
+    "title": {
+      "zh": "麒麟創作工坊",
+      "en": "Kirin Art Workshop"
+    },
+    "description": {
+      "zh": "同好們在工坊區專注描繪吉祥物桃漪並展示精彩的創意繪畫。",
+      "en": "Attendees drawing Peach Ripple and showing off their creativity."
+    }
+  },
+  {
+    "id": "gallery-img-0866",
+    "url": "/img/gallary/26/IMG_0866.avif",
+    "title": {
+      "zh": "夜場音樂派對狂歡",
+      "en": "Late Night Music Party"
+    },
+    "description": {
+      "zh": "夜場「彩虹音爆」派對中，DJ帶來節奏強烈的小馬混音舞曲狂歡。",
+      "en": "DJs hyping up the audience with pony remixes during the Sonic Rainboom night."
+    }
+  },
+  {
+    "id": "gallery-img-8636",
+    "url": "/img/gallary/26/IMG_8636.avif",
+    "title": {
+      "zh": "大合唱溫馨尾聲",
+      "en": "Group Sing-along Finale"
+    },
+    "description": {
+      "zh": "全場同好在大合唱時間齊聲高歌經典小馬曲目，為大會畫下溫馨句點。",
+      "en": "Everyone gathering to sing their favorite pony songs together to close the con."
+    }
+  },
+  {
+    "id": "group-photo",
+    "url": "/img/gallary/26/twbc2026.avif",
+    "title": {
+      "zh": "大合照",
+      "en": "Group Photo"
+    },
+    "description": {
+      "zh": "所有與會小馬迷的歡樂合影！",
+      "en": "A joyful group photo of all attending pony fans!"
+    }
+  }
+]

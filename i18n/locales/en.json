@@ -64,7 +64,16 @@
       "\"Friendship isn't always easy, but it's worth protecting.\" – Twilight Sparkle",
       "\"A party is the best way to make friends!\" – Pinkie Pie"
     ],
-    "quotesLoading": "Loading..."
+    "quotesLoading": "Loading...",
+    "thankYou": {
+      "title": "Taiwan BronyCon 2026 Concluded Successfully!",
+      "subtitle": "A heartfelt thank you to all attendees, creators, volunteers, and partners. Your presence and support made our first con truly magical. We hope the memories and friendships created here will stay in your hearts forever!",
+      "viewGallery": "View Featured Photos"
+    },
+    "galleryPreview": {
+      "title": "Event Highlights",
+      "subtitle": "Relive the wonderful moments of Taiwan BronyCon 2026."
+    }
   },
   "ticket": {
     "title": "Tickets",
@@ -125,7 +134,8 @@
     "schedule": "Schedule",
     "venue": "Venue",
     "transport": "Transport",
-    "booths": "Booths"
+    "booths": "Booths",
+    "gallery": "Gallery"
   },
   "tba": {
     "about": "About Us (TBA)",
@@ -342,5 +352,14 @@
       "media": "Media & Collaboration",
       "other": "Other Topics"
     }
+  },
+  "gallery": {
+    "title": "Event Gallery",
+    "subtitle": "Capturing the magic of friendship and creative passion at TWBC 2026",
+    "backHome": "Back to Home",
+    "noPhotos": "No photos found.",
+    "prev": "Previous",
+    "next": "Next",
+    "imageCounter": "Photo {current} of {total}"
   }
 }
