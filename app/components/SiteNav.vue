@@ -84,6 +84,14 @@ onUnmounted(() => {
       >{{ $t("menu.news") }}</NuxtLink
     >
     <NuxtLink
+      :to="localePath('/gallery')"
+      @click="
+        isNavOpen = false;
+        openSubmenu = null;
+      "
+      >{{ $t("menu.gallery") }}</NuxtLink
+    >
+    <NuxtLink
       :to="localePath('/ticket')"
       @click="
         isNavOpen = false;
