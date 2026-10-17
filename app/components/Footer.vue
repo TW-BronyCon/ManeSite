@@ -70,7 +70,7 @@ const { currentQuote, isQuoteFadingOut } = useQuotes(
 
           <div class="footer-lang-switcher">
             <NuxtLink
-              v-for="item in locales as any"
+              v-for="item in locales"
               :key="item.code"
               :to="switchLocalePath(item.code)"
               :class="{ active: locale === item.code }"
@@ -173,7 +173,7 @@ const { currentQuote, isQuoteFadingOut } = useQuotes(
   -webkit-backdrop-filter: blur(10px);
   /* border-top: 1px solid rgba(255, 255, 255, 0.1); */
   padding: 3rem 0 1.5rem;
-  color: #fff;
+  color: var(--color-text-light);
   z-index: 10;
 }
 
@@ -237,12 +237,12 @@ const { currentQuote, isQuoteFadingOut } = useQuotes(
 .social-icon {
   font-size: 1.5rem;
   color: var(--color-pink);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s var(--ease-pop);
 }
 
 .social-icon:hover {
   transform: translateY(-5px) scale(1.1);
-  color: #fff;
+  color: var(--color-text-light);
 }
 
 .social-icon.youtube:hover {

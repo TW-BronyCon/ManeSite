@@ -28,7 +28,7 @@ The site features:
 - Event information and countdown
 - Ticket information and purchase links
 - Multi-language support (Traditional Chinese and English)
-- Interactive map (using Leaflet)
+- Interactive inline-SVG venue map
 
 ## Tech Stack
 
@@ -36,20 +36,20 @@ The site features:
 - **UI:** [Vue 3](https://vuejs.org/) (Composition API)
 - **Styling:** Vanilla CSS
 - **i18n:** [@nuxtjs/i18n](https://i18n.nuxtjs.org/)
-- **Maps:** [Leaflet](https://leafletjs.com/)
+- **Venue map:** Inline SVG with Vue-managed zoom, pan, and selection
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (Latest LTS recommended)
+- Node.js 24 (see `.node-version`)
 - `npm` or `pnpm`
 
 ### Installation
 
 ```bash
 # Install dependencies
-npm install
+npm ci
 ```
 
 ### Development
@@ -68,6 +68,31 @@ npm run build
 # Preview production build
 npm run preview
 ```
+
+## Shared page code
+
+- `HomePage.vue` serves both the index and `/home` routes; SEO remains route-owned.
+- `usePageSeo` shares reactive page metadata and the canonical origin in `app/utils/site.ts`; call it last in page setup. Global defaults remain in `app.vue`.
+- `app/utils/markdown.ts` shares frontmatter parsing and ordered image attachments. News strips matching metadata quotes; events preserve them. Repository Markdown is trusted content.
+- `ContentAttachments` emits image selection; `ImageLightbox` owns overlay rendering and its Escape listener. Pages retain gallery state and choose Escape behavior.
+- Ticket components render typed data from `ticketData.ts`; the ticket page retains timing, pricing, modes, and hover state.
+- `useVenueViewport` owns gestures and viewport listeners; `VenueInfoSidebar` renders page-owned selection. `venueMapData.ts` supplies shared physical booth geometry.
+- `useScheduleModel` derives timetable views; keyboard navigation and modal lifecycle remain in the schedule page.
+- `PageLayout.vue` and `app/assets/css/variables.css` remain the page-wrapper and design-token authorities.
+
+### Verification without Discord synchronization
+
+The `dev`, `build`, and `typecheck` npm scripts synchronize crew avatars. To work with the existing generated crew fixture without contacting Discord, use the direct Nuxt commands:
+
+```bash
+./node_modules/.bin/nuxt dev --host 127.0.0.1 --port 3000
+npm test
+npm run i18n:check
+./node_modules/.bin/nuxi typecheck
+./node_modules/.bin/nuxt build
+```
+
+`npm test` uses Node's built-in test runner and Node 24 TypeScript stripping for the shared content utilities.
 
 ## Contributors
 

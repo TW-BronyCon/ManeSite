@@ -1,32 +1,24 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { booths, type Booth } from "~/data/boothData";
+import { boothPositions } from "~/data/venueMapData";
+import { getTrackForVenueZone } from "~/utils/venue";
+import type { VenueZoneEvent } from "~/types/content";
 
 /** Look up a booth by its physical map position. */
 const boothByMapId = (mapId: string): Booth | undefined =>
   booths.find((b) => b.mapId === mapId);
+
+const visibleBoothPositions = computed(() =>
+  boothPositions.filter((position) => boothByMapId(position.mapId)),
+);
 import { events, EVENT_COLORS } from "~/data/scheduleData";
 
 const { t, locale } = useI18n();
-const localePath = useLocalePath();
 const route = useRoute();
 
 definePageMeta({
   underDevelopment: false,
-});
-
-const siteUrl = "https://twbronycon.org";
-
-useSeoMeta({
-  title: () => t("venue.title"),
-  ogTitle: () => t("venue.title"),
-  twitterTitle: () => t("venue.title"),
-  description: () => t("seo.description"),
-  ogDescription: () => t("seo.description"),
-  twitterDescription: () => t("seo.description"),
-  ogImage: `${siteUrl}/img/text-logo.avif`,
-  twitterImage: `${siteUrl}/img/text-logo.avif`,
-  ogUrl: computed(() => `${siteUrl}${route.path}`),
 });
 
 // Selection states
@@ -34,6 +26,9 @@ const selectedZoneId = ref<string | null>(null);
 const selectedBooth = ref<Booth | null>(null);
 const hoveredZoneId = ref<string | null>(null);
 const hoveredBoothId = ref<string | null>(null);
+const hoveredBooth = computed(() =>
+  hoveredBoothId.value ? (boothByMapId(hoveredBoothId.value) ?? null) : null,
+);
 
 const fromEventId = computed(() => route.query.fromEvent as string | undefined);
 const fromEvent = computed(() => {
@@ -53,20 +48,10 @@ function getLines(text: string): string[] {
   return text.split("\n");
 }
 
-function cleanLabel(text: string): string {
-  return text.replace(/\n/g, " ");
-}
-
 // Event mapping for zones
-const zoneEvents = computed(() => {
+const zoneEvents = computed<VenueZoneEvent[]>(() => {
   if (!selectedZoneId.value) return [];
-  const trackMap: Record<string, string> = {
-    stage: "main",
-    vendors: "vendor",
-    workshop: "workshop",
-    social: "social",
-  };
-  const track = trackMap[selectedZoneId.value];
+  const track = getTrackForVenueZone(selectedZoneId.value);
   if (!track) return [];
   return events
     .filter((e) => e.track === track)
@@ -76,7 +61,6 @@ const zoneEvents = computed(() => {
     .map((e) => {
       const rawColor = EVENT_COLORS[e.type];
       const bg = normalizeHexColor(rawColor);
-      const text = getContrastColor(bg);
       return {
         id: e.id,
         title: isEn.value ? e.title.en : e.title.zh,
@@ -84,282 +68,30 @@ const zoneEvents = computed(() => {
         end: e.end,
         detail: e.detail ? (isEn.value ? e.detail.en : e.detail.zh) : "",
         bg,
-        text,
       };
     });
 });
 
-// Zoom and Pan States
-const zoom = ref(1);
-const panX = ref(0);
-const panY = ref(0);
-const isDragging = ref(false);
-const startX = ref(0);
-const startY = ref(0);
-const dragStartX = ref(0);
-const dragStartY = ref(0);
-const dragDistance = ref(0); // Will store squared distance for performance
-
-// Touch-specific zoom states
-const startTouchDistance = ref(0);
-const startZoom = ref(1);
-const touchMidX = ref(0);
-const touchMidY = ref(0);
-
-// SVG size cache to prevent synchronous reflow during panning/zooming
-let svgRectW = 0;
-let svgRectH = 0;
-
-const updateSvgRectSize = () => {
-  const wrapper = document.getElementById("map-wrapper");
-  if (wrapper) {
-    const rect = wrapper.getBoundingClientRect();
-    svgRectW = rect.width;
-    svgRectH = rect.height;
-  }
-};
-
-const cursorStyle = computed(() => {
-  if (zoom.value <= 1) return "default";
-  return isDragging.value ? "grabbing" : "grab";
-});
-
-const clampPan = () => {
-  if (svgRectW <= 0 || svgRectH <= 0) return;
-
-  if (zoom.value <= 1) {
-    panX.value = 0;
-    panY.value = 0;
-    return;
-  }
-
-  // Allow panning beyond the strict boundaries when zoomed to let elements on the edges center properly.
-  // The padding is 0 when zoom is 1, and grows as zoom increases.
-  const paddingX = svgRectW * 0.4 * (zoom.value - 1);
-  const paddingY = svgRectH * 0.4 * (zoom.value - 1);
-
-  const minX = svgRectW * (1 - zoom.value) - paddingX;
-  const maxX = paddingX;
-  const minY = svgRectH * (1 - zoom.value) - paddingY;
-  const maxY = paddingY;
-
-  panX.value = Math.max(minX, Math.min(maxX, panX.value));
-  panY.value = Math.max(minY, Math.min(maxY, panY.value));
-};
-
-const startPan = (e: MouseEvent) => {
-  isDragging.value = true;
-  startX.value = e.clientX - panX.value;
-  startY.value = e.clientY - panY.value;
-  dragStartX.value = e.clientX;
-  dragStartY.value = e.clientY;
-  dragDistance.value = 0;
-  updateSvgRectSize();
-
-  window.addEventListener("mousemove", onPan);
-  window.addEventListener("mouseup", endPan);
-};
-
-const onPan = (e: MouseEvent) => {
-  if (!isDragging.value) return;
-  const dx = e.clientX - dragStartX.value;
-  const dy = e.clientY - dragStartY.value;
-  dragDistance.value = dx * dx + dy * dy;
-
-  panX.value = e.clientX - startX.value;
-  panY.value = e.clientY - startY.value;
-  clampPan();
-};
-
-const endPan = () => {
-  if (!isDragging.value) return;
-  isDragging.value = false;
-  window.removeEventListener("mousemove", onPan);
-  window.removeEventListener("mouseup", endPan);
-};
-
-const handleWheel = (e: WheelEvent) => {
-  e.preventDefault();
-  updateSvgRectSize();
-  const zoomFactor = 1.15;
-  const nextZoom =
-    e.deltaY < 0 ? zoom.value * zoomFactor : zoom.value / zoomFactor;
-  adjustZoom(nextZoom, e.clientX, e.clientY, true);
-};
-
-// Touch event handlers (improved touch-friendliness)
-const startTouchPan = (e: TouchEvent) => {
-  updateSvgRectSize();
-  if (e.touches.length === 1) {
-    const touch0 = e.touches[0];
-    if (!touch0) return;
-    isDragging.value = true;
-    startX.value = touch0.clientX - panX.value;
-    startY.value = touch0.clientY - panY.value;
-    dragStartX.value = touch0.clientX;
-    dragStartY.value = touch0.clientY;
-    dragDistance.value = 0;
-  } else if (e.touches.length === 2) {
-    const touch0 = e.touches[0];
-    const touch1 = e.touches[1];
-    if (!touch0 || !touch1) return;
-    isDragging.value = false;
-    startTouchDistance.value = Math.hypot(
-      touch0.clientX - touch1.clientX,
-      touch0.clientY - touch1.clientY,
-    );
-    startZoom.value = zoom.value;
-
-    const wrapper = document.getElementById("map-wrapper");
-    if (wrapper) {
-      const rect = wrapper.getBoundingClientRect();
-      touchMidX.value = (touch0.clientX + touch1.clientX) / 2 - rect.left;
-      touchMidY.value = (touch0.clientY + touch1.clientY) / 2 - rect.top;
-    }
-  }
-};
-
-const onTouchPan = (e: TouchEvent) => {
-  if (e.touches.length === 1 && isDragging.value) {
-    const touch0 = e.touches[0];
-    if (!touch0) return;
-    if (zoom.value > 1) {
-      e.preventDefault();
-      panX.value = touch0.clientX - startX.value;
-      panY.value = touch0.clientY - startY.value;
-      clampPan();
-    } else {
-      // If not zoomed, only prevent horizontal pans to allow scrolling the page vertically on mobile
-      const dx = touch0.clientX - startX.value - panX.value;
-      const dy = touch0.clientY - startY.value - panY.value;
-      if (Math.abs(dx) > Math.abs(dy)) {
-        e.preventDefault();
-      }
-    }
-    const dx = touch0.clientX - dragStartX.value;
-    const dy = touch0.clientY - dragStartY.value;
-    dragDistance.value = dx * dx + dy * dy;
-  } else if (e.touches.length === 2) {
-    const touch0 = e.touches[0];
-    const touch1 = e.touches[1];
-    if (!touch0 || !touch1) return;
-    e.preventDefault();
-    const currentDistance = Math.hypot(
-      touch0.clientX - touch1.clientX,
-      touch0.clientY - touch1.clientY,
-    );
-    if (startTouchDistance.value > 0) {
-      const scale = currentDistance / startTouchDistance.value;
-      const targetZoom = startZoom.value * scale;
-      adjustZoom(targetZoom, touchMidX.value, touchMidY.value, false);
-    }
-  }
-};
-
-const endTouchPan = (e: TouchEvent) => {
-  if (e.touches.length === 0) {
-    isDragging.value = false;
-    // If the user was just pinch-zooming, keep dragDistance high to prevent triggering a click when fingers lift
-    if (startTouchDistance.value > 0) {
-      dragDistance.value = 999999;
-    }
-    startTouchDistance.value = 0;
-  } else if (e.touches.length === 1) {
-    const touch0 = e.touches[0];
-    if (!touch0) return;
-    isDragging.value = true;
-    startX.value = touch0.clientX - panX.value;
-    startY.value = touch0.clientY - panY.value;
-    dragStartX.value = touch0.clientX;
-    dragStartY.value = touch0.clientY;
-
-    // If the user was just pinch-zooming, keep dragDistance high to prevent triggering a click on release
-    if (startTouchDistance.value > 0) {
-      dragDistance.value = 999999;
-    } else {
-      dragDistance.value = 0;
-    }
-    startTouchDistance.value = 0;
-  }
-};
-
-// Adjust Zoom centered at a screen point
-const adjustZoom = (
-  targetZoom: number,
-  screenX: number,
-  screenY: number,
-  useClientCoord = false,
-) => {
-  const clampedZoom = Math.max(1, Math.min(4, targetZoom));
-  if (clampedZoom === zoom.value) return;
-
-  if (svgRectW > 0 && svgRectH > 0) {
-    let rectLeft = 0;
-    let rectTop = 0;
-    if (useClientCoord) {
-      const wrapper = document.getElementById("map-wrapper");
-      if (wrapper) {
-        const rect = wrapper.getBoundingClientRect();
-        rectLeft = rect.left;
-        rectTop = rect.top;
-      }
-    }
-
-    const targetX = useClientCoord ? screenX - rectLeft : screenX;
-    const targetY = useClientCoord ? screenY - rectTop : screenY;
-
-    const ptX = (targetX - panX.value) / zoom.value;
-    const ptY = (targetY - panY.value) / zoom.value;
-
-    zoom.value = clampedZoom;
-    panX.value = targetX - ptX * clampedZoom;
-    panY.value = targetY - ptY * clampedZoom;
-    clampPan();
-  } else {
-    zoom.value = clampedZoom;
-  }
-};
-
-const zoomIn = () => {
-  updateSvgRectSize();
-  if (svgRectW > 0) {
-    adjustZoom(zoom.value * 1.3, svgRectW / 2, svgRectH / 2);
-  } else {
-    zoom.value = Math.min(4, zoom.value * 1.3);
-  }
-};
-
-const zoomOut = () => {
-  updateSvgRectSize();
-  if (svgRectW > 0) {
-    adjustZoom(zoom.value / 1.3, svgRectW / 2, svgRectH / 2);
-  } else {
-    zoom.value = Math.max(1, zoom.value / 1.3);
-  }
-};
-
-const resetZoom = () => {
-  zoom.value = 1;
-  panX.value = 0;
-  panY.value = 0;
-};
-
-// Convert SVG coordinates to screen coordinates and zoom/pan to center
-const zoomToCoords = (svgX: number, svgY: number, targetZoom = 2) => {
-  updateSvgRectSize();
-  if (svgRectW <= 0 || svgRectH <= 0) return;
-
-  zoom.value = targetZoom;
-
-  const scaleX = svgRectW / 598.22;
-  const scaleY = svgRectH / 598.22;
-  const targetX = svgX * scaleX;
-  const targetY = svgY * scaleY;
-
-  panX.value = svgRectW / 2 - targetX * targetZoom;
-  panY.value = svgRectH / 2 - targetY * targetZoom;
-  clampPan();
-};
+const mapWrapper = ref<HTMLElement | null>(null);
+const {
+  zoom,
+  panX,
+  panY,
+  startTouchDistance,
+  dragDistance,
+  isDragging,
+  cursorStyle,
+  updateSvgRectSize,
+  startPan,
+  handleWheel,
+  startTouchPan,
+  onTouchPan,
+  endTouchPan,
+  zoomIn,
+  zoomOut,
+  resetZoom,
+  zoomToCoords,
+} = useVenueViewport(mapWrapper);
 
 // Handlers
 const openZone = (zoneId: string) => {
@@ -389,19 +121,9 @@ const openBooth = (booth: Booth) => {
   selectedZoneId.value = null;
 
   // Keyed by mapId (physical position on the SVG)
-  const boothCenters: Record<string, { x: number; y: number }> = {
-    "1": { x: 107.56, y: 260.74 },
-    "2": { x: 125.97, y: 285.52 },
-    "3": { x: 152.03, y: 320.59 },
-    "4": { x: 170.44, y: 345.37 },
-    "5": { x: 196.5, y: 380.44 },
-    "6": { x: 165.16, y: 233.38 },
-    "7": { x: 183.57, y: 258.17 },
-    "8": { x: 196.95, y: 209.75 },
-    "9": { x: 215.37, y: 234.53 },
-    "10": { x: 212.86, y: 264.25 },
-  };
-  const coords = boothCenters[booth.mapId];
+  const coords = boothPositions.find(
+    (position) => position.mapId === booth.mapId,
+  );
   if (coords) {
     zoomToCoords(coords.x, coords.y, 2.5);
   }
@@ -434,7 +156,6 @@ const handleKeyDown = (e: KeyboardEvent) => {
 
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
-  window.addEventListener("resize", updateSvgRectSize);
 
   setTimeout(() => {
     updateSvgRectSize();
@@ -450,9 +171,11 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener("keydown", handleKeyDown);
-  window.removeEventListener("resize", updateSvgRectSize);
-  window.removeEventListener("mousemove", onPan);
-  window.removeEventListener("mouseup", endPan);
+});
+
+usePageSeo({
+  title: () => t("venue.title"),
+  description: () => t("seo.description"),
 });
 </script>
 
@@ -467,7 +190,7 @@ onUnmounted(() => {
       <div class="venue-layout">
         <!-- SVG Map Container -->
         <div class="map-container-card">
-          <div class="map-wrapper" id="map-wrapper">
+          <div class="map-wrapper" id="map-wrapper" ref="mapWrapper">
             <div
               class="map-viewport"
               :class="{
@@ -841,26 +564,26 @@ onUnmounted(() => {
 
                   <!-- Interactive Booths Layer -->
                   <g id="booths-layer">
-                    <!-- Booth 1 (mapId=1) -->
                     <g
+                      v-for="position in visibleBoothPositions"
+                      :key="position.mapId"
                       class="booth-group"
-                      v-if="booths.some((b) => b.mapId === '1')"
                       :class="{
                         active:
-                          hoveredBoothId === '1' ||
-                          selectedBooth?.mapId === '1',
+                          hoveredBoothId === position.mapId ||
+                          selectedBooth?.mapId === position.mapId,
                       }"
-                      transform="translate(107.56, 260.74) rotate(-36.62)"
-                      @mouseover="hoveredBoothId = '1'"
+                      :transform="`translate(${position.x}, ${position.y}) rotate(-36.62)`"
+                      @mouseover="hoveredBoothId = position.mapId"
                       @mouseleave="hoveredBoothId = null"
-                      @click.stop="openBoothByMapId('1')"
+                      @click.stop="openBoothByMapId(position.mapId)"
                     >
                       <rect
                         class="booth-rect"
-                        x="-9.34"
-                        y="-7.72"
-                        width="18.68"
-                        height="15.44"
+                        :x="-position.width / 2"
+                        :y="-position.height / 2"
+                        :width="position.width"
+                        :height="position.height"
                         rx="2"
                         ry="2"
                       />
@@ -871,304 +594,7 @@ onUnmounted(() => {
                         dominant-baseline="central"
                         text-anchor="middle"
                       >
-                        {{ "1" }}
-                      </text>
-                    </g>
-                    <!-- Booth 2 (mapId=2) -->
-                    <g
-                      class="booth-group"
-                      v-if="booths.some((b) => b.mapId === '2')"
-                      :class="{
-                        active:
-                          hoveredBoothId === '2' ||
-                          selectedBooth?.mapId === '2',
-                      }"
-                      transform="translate(125.97, 285.52) rotate(-36.62)"
-                      @mouseover="hoveredBoothId = '2'"
-                      @mouseleave="hoveredBoothId = null"
-                      @click.stop="openBoothByMapId('2')"
-                    >
-                      <rect
-                        class="booth-rect"
-                        x="-9.34"
-                        y="-7.72"
-                        width="18.68"
-                        height="15.44"
-                        rx="2"
-                        ry="2"
-                      />
-                      <text
-                        class="booth-label"
-                        x="0"
-                        y="0.5"
-                        dominant-baseline="central"
-                        text-anchor="middle"
-                      >
-                        {{ "2" }}
-                      </text>
-                    </g>
-                    <!-- Booth 3 (mapId=3) -->
-                    <g
-                      class="booth-group"
-                      v-if="booths.some((b) => b.mapId === '3')"
-                      :class="{
-                        active:
-                          hoveredBoothId === '3' ||
-                          selectedBooth?.mapId === '3',
-                      }"
-                      transform="translate(152.03, 320.59) rotate(-36.62)"
-                      @mouseover="hoveredBoothId = '3'"
-                      @mouseleave="hoveredBoothId = null"
-                      @click.stop="openBoothByMapId('3')"
-                    >
-                      <rect
-                        class="booth-rect"
-                        x="-9.34"
-                        y="-7.72"
-                        width="18.68"
-                        height="15.44"
-                        rx="2"
-                        ry="2"
-                      />
-                      <text
-                        class="booth-label"
-                        x="0"
-                        y="0.5"
-                        dominant-baseline="central"
-                        text-anchor="middle"
-                      >
-                        {{ "3" }}
-                      </text>
-                    </g>
-                    <!-- Booth 4 (mapId=4) -->
-                    <g
-                      class="booth-group"
-                      v-if="booths.some((b) => b.mapId === '4')"
-                      :class="{
-                        active:
-                          hoveredBoothId === '4' ||
-                          selectedBooth?.mapId === '4',
-                      }"
-                      transform="translate(170.44, 345.37) rotate(-36.62)"
-                      @mouseover="hoveredBoothId = '4'"
-                      @mouseleave="hoveredBoothId = null"
-                      @click.stop="openBoothByMapId('4')"
-                    >
-                      <rect
-                        class="booth-rect"
-                        x="-9.34"
-                        y="-7.72"
-                        width="18.68"
-                        height="15.44"
-                        rx="2"
-                        ry="2"
-                      />
-                      <text
-                        class="booth-label"
-                        x="0"
-                        y="0.5"
-                        dominant-baseline="central"
-                        text-anchor="middle"
-                      >
-                        {{ "4" }}
-                      </text>
-                    </g>
-                    <!-- Booth 5 (mapId=5) -->
-                    <g
-                      class="booth-group"
-                      v-if="booths.some((b) => b.mapId === '5')"
-                      :class="{
-                        active:
-                          hoveredBoothId === '5' ||
-                          selectedBooth?.mapId === '5',
-                      }"
-                      transform="translate(196.5, 380.44) rotate(-36.62)"
-                      @mouseover="hoveredBoothId = '5'"
-                      @mouseleave="hoveredBoothId = null"
-                      @click.stop="openBoothByMapId('5')"
-                    >
-                      <rect
-                        class="booth-rect"
-                        x="-9.34"
-                        y="-7.72"
-                        width="18.68"
-                        height="15.44"
-                        rx="2"
-                        ry="2"
-                      />
-                      <text
-                        class="booth-label"
-                        x="0"
-                        y="0.5"
-                        dominant-baseline="central"
-                        text-anchor="middle"
-                      >
-                        {{ "5" }}
-                      </text>
-                    </g>
-                    <!-- Booth 6 (mapId=6) -->
-                    <g
-                      class="booth-group"
-                      v-if="booths.some((b) => b.mapId === '6')"
-                      :class="{
-                        active:
-                          hoveredBoothId === '6' ||
-                          selectedBooth?.mapId === '6',
-                      }"
-                      transform="translate(165.16, 233.38) rotate(-36.62)"
-                      @mouseover="hoveredBoothId = '6'"
-                      @mouseleave="hoveredBoothId = null"
-                      @click.stop="openBoothByMapId('6')"
-                    >
-                      <rect
-                        class="booth-rect"
-                        x="-9.34"
-                        y="-7.72"
-                        width="18.68"
-                        height="15.44"
-                        rx="2"
-                        ry="2"
-                      />
-                      <text
-                        class="booth-label"
-                        x="0"
-                        y="0.5"
-                        dominant-baseline="central"
-                        text-anchor="middle"
-                      >
-                        {{ "6" }}
-                      </text>
-                    </g>
-                    <!-- Booth 7 (mapId=7) -->
-                    <g
-                      class="booth-group"
-                      v-if="booths.some((b) => b.mapId === '7')"
-                      :class="{
-                        active:
-                          hoveredBoothId === '7' ||
-                          selectedBooth?.mapId === '7',
-                      }"
-                      transform="translate(183.57, 258.17) rotate(-36.62)"
-                      @mouseover="hoveredBoothId = '7'"
-                      @mouseleave="hoveredBoothId = null"
-                      @click.stop="openBoothByMapId('7')"
-                    >
-                      <rect
-                        class="booth-rect"
-                        x="-9.34"
-                        y="-7.72"
-                        width="18.68"
-                        height="15.44"
-                        rx="2"
-                        ry="2"
-                      />
-                      <text
-                        class="booth-label"
-                        x="0"
-                        y="0.5"
-                        dominant-baseline="central"
-                        text-anchor="middle"
-                      >
-                        {{ "7" }}
-                      </text>
-                    </g>
-                    <!-- Booth 8 (mapId=8) -->
-                    <g
-                      class="booth-group"
-                      v-if="booths.some((b) => b.mapId === '8')"
-                      :class="{
-                        active:
-                          hoveredBoothId === '8' ||
-                          selectedBooth?.mapId === '8',
-                      }"
-                      transform="translate(196.95, 209.75) rotate(-36.62)"
-                      @mouseover="hoveredBoothId = '8'"
-                      @mouseleave="hoveredBoothId = null"
-                      @click.stop="openBoothByMapId('8')"
-                    >
-                      <rect
-                        class="booth-rect"
-                        x="-9.34"
-                        y="-7.72"
-                        width="18.68"
-                        height="15.44"
-                        rx="2"
-                        ry="2"
-                      />
-                      <text
-                        class="booth-label"
-                        x="0"
-                        y="0.5"
-                        dominant-baseline="central"
-                        text-anchor="middle"
-                      >
-                        {{ "8" }}
-                      </text>
-                    </g>
-                    <!-- Booth 9 (mapId=9) -->
-                    <g
-                      class="booth-group"
-                      v-if="booths.some((b) => b.mapId === '9')"
-                      :class="{
-                        active:
-                          hoveredBoothId === '9' ||
-                          selectedBooth?.mapId === '9',
-                      }"
-                      transform="translate(215.37, 234.53) rotate(-36.62)"
-                      @mouseover="hoveredBoothId = '9'"
-                      @mouseleave="hoveredBoothId = null"
-                      @click.stop="openBoothByMapId('9')"
-                    >
-                      <rect
-                        class="booth-rect"
-                        x="-9.34"
-                        y="-7.72"
-                        width="18.68"
-                        height="15.44"
-                        rx="2"
-                        ry="2"
-                      />
-                      <text
-                        class="booth-label"
-                        x="0"
-                        y="0.5"
-                        dominant-baseline="central"
-                        text-anchor="middle"
-                      >
-                        {{ "9" }}
-                      </text>
-                    </g>
-                    <!-- Booth 10 (mapId=10) -->
-                    <g
-                      class="booth-group"
-                      v-if="booths.some((b) => b.mapId === '10')"
-                      :class="{
-                        active:
-                          hoveredBoothId === '10' ||
-                          selectedBooth?.mapId === '10',
-                      }"
-                      transform="translate(212.86, 264.25) rotate(-36.62)"
-                      @mouseover="hoveredBoothId = '10'"
-                      @mouseleave="hoveredBoothId = null"
-                      @click.stop="openBoothByMapId('10')"
-                    >
-                      <rect
-                        class="booth-rect"
-                        x="-7.72"
-                        y="-9.34"
-                        width="15.44"
-                        height="18.68"
-                        rx="2"
-                        ry="2"
-                      />
-                      <text
-                        class="booth-label"
-                        x="0"
-                        y="0.5"
-                        dominant-baseline="central"
-                        text-anchor="middle"
-                      >
-                        {{ "10" }}
+                        {{ position.mapId }}
                       </text>
                     </g>
                   </g>
@@ -1210,234 +636,16 @@ onUnmounted(() => {
         </div>
 
         <!-- Sidebar / Interactive Info Deck Column Wrapper -->
-        <div class="sidebar-column-wrapper">
-          <div
-            class="info-sidebar-card"
-            :class="{ 'has-selection': selectedZoneId || selectedBooth }"
-          >
-            <!-- Clear Selection Close Button -->
-            <button
-              v-if="selectedZoneId || selectedBooth"
-              class="clear-selection-btn"
-              type="button"
-              @click="clearSelection"
-              :title="t('common.close')"
-              :aria-label="t('common.close')"
-            >
-              <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-            </button>
-
-            <!-- Hover/Selection Context Info -->
-            <div class="sidebar-content-wrapper">
-              <!-- 1. Selection State: Booth -->
-              <template v-if="selectedBooth">
-                <div class="sidebar-item-detail">
-                  <span class="preview-badge booth-badge">{{
-                    t("venue.modal.boothTitle", { id: selectedBooth.mapId })
-                  }}</span>
-                  <h3>{{ selectedBooth.name[isEn ? "en" : "zh"] }}</h3>
-                  <div class="sidebar-section-title">
-                    {{ t("venue.modal.boothIntro") }}
-                  </div>
-                  <p class="detail-desc">
-                    {{ selectedBooth.introduction[isEn ? "en" : "zh"] }}
-                  </p>
-
-                  <div class="booth-cta-section">
-                    <NuxtLink
-                      :to="localePath(`/booths/${selectedBooth.id}`)"
-                      class="view-detail-btn"
-                    >
-                      <span>{{ t("venue.modal.viewBoothDetail") }}</span>
-                      <i class="fa-solid fa-arrow-right"></i>
-                    </NuxtLink>
-                  </div>
-
-                  <!-- Links -->
-                  <div
-                    v-if="selectedBooth.links && selectedBooth.links.length > 0"
-                    class="sidebar-links-section"
-                  >
-                    <div class="sidebar-section-title">
-                      {{ t("venue.modal.links") }}
-                    </div>
-                    <div class="links-grid">
-                      <a
-                        v-for="(link, idx) in selectedBooth.links"
-                        :key="idx"
-                        :href="link.url"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="booth-social-link"
-                      >
-                        <i :class="link.icon || 'fa-solid fa-link'"></i>
-                        <span>{{ link.label }}</span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </template>
-
-              <!-- 2. Selection State: Zone -->
-              <template v-else-if="selectedZoneId">
-                <div class="sidebar-item-detail">
-                  <span
-                    class="preview-badge"
-                    :class="`zone-badge-${selectedZoneId}`"
-                  >
-                    {{ cleanLabel(t(`venue.legend.${selectedZoneId}`)) }}
-                  </span>
-
-                  <h3>{{ cleanLabel(t(`venue.legend.${selectedZoneId}`)) }}</h3>
-                  <div class="sidebar-section-title">
-                    {{ t("venue.modal.details") }}
-                  </div>
-                  <p class="detail-desc">
-                    {{ t(`venue.zones.${selectedZoneId}`) }}
-                  </p>
-
-                  <!-- Linked Events Schedule -->
-                  <div
-                    v-if="
-                      ['stage', 'vendors', 'workshop', 'social'].includes(
-                        selectedZoneId,
-                      )
-                    "
-                    class="sidebar-events-section"
-                  >
-                    <div class="sidebar-section-title">
-                      {{ t("venue.modal.events") }}
-                    </div>
-
-                    <div v-if="zoneEvents.length > 0" class="events-list">
-                      <NuxtLink
-                        v-for="(event, idx) in zoneEvents"
-                        :key="idx"
-                        :to="
-                          event.id
-                            ? localePath(`/events/${event.id}`)
-                            : undefined
-                        "
-                        :class="[
-                          'event-item-wrapper',
-                          { 'interactive-wrapper': event.id },
-                        ]"
-                      >
-                        <div
-                          :class="[
-                            'event-item',
-                            {
-                              'interactive-item': event.id,
-                              'active-event-item': event.id === fromEventId,
-                            },
-                          ]"
-                          :style="{
-                            borderLeftColor:
-                              event.id === fromEventId
-                                ? 'var(--color-gold)'
-                                : event.bg,
-                            backgroundColor:
-                              event.id === fromEventId
-                                ? 'rgba(255, 230, 167, 0.08)'
-                                : event.bg + '12',
-                          }"
-                        >
-                          <div class="event-item-content">
-                            <div
-                              class="event-time"
-                              :style="{ color: event.bg }"
-                            >
-                              {{ event.start }} - {{ event.end }}
-                            </div>
-                            <div class="event-title">{{ event.title }}</div>
-                            <div v-if="event.detail" class="event-desc">
-                              {{ event.detail }}
-                            </div>
-                          </div>
-                          <div class="event-item-action" v-if="event.id">
-                            <i class="fa-solid fa-chevron-right"></i>
-                          </div>
-                        </div>
-                      </NuxtLink>
-                    </div>
-                    <p v-else class="no-events-text">
-                      {{ t("venue.modal.noEvents") }}
-                    </p>
-                  </div>
-                </div>
-              </template>
-
-              <!-- 3. Hover State: Booth -->
-              <template v-else-if="hoveredBoothId">
-                <div class="sidebar-item-preview">
-                  <span class="preview-badge booth-badge">{{
-                    t("venue.modal.boothTitle", {
-                      id: boothByMapId(hoveredBoothId)?.id ?? hoveredBoothId,
-                    })
-                  }}</span>
-                  <h3>
-                    {{ boothByMapId(hoveredBoothId)?.name[isEn ? "en" : "zh"] }}
-                  </h3>
-                  <p class="preview-desc">
-                    {{
-                      boothByMapId(hoveredBoothId)?.introduction[
-                        isEn ? "en" : "zh"
-                      ]
-                    }}
-                  </p>
-                  <div class="tap-hint">
-                    <i class="fa-solid fa-hand-pointer"></i>
-                    <span>{{
-                      isEn
-                        ? "Click to show links & details"
-                        : "點擊以顯示詳情與連結"
-                    }}</span>
-                  </div>
-                </div>
-              </template>
-
-              <!-- 4. Hover State: Zone -->
-              <template
-                v-else-if="hoveredZoneId && hoveredZoneId !== 'entrance'"
-              >
-                <div class="sidebar-item-preview">
-                  <span
-                    class="preview-badge"
-                    :class="`zone-badge-${hoveredZoneId}`"
-                    >{{ cleanLabel(t(`venue.legend.${hoveredZoneId}`)) }}</span
-                  >
-                  <h3>{{ cleanLabel(t(`venue.legend.${hoveredZoneId}`)) }}</h3>
-                  <p class="preview-desc">
-                    {{ t(`venue.zones.${hoveredZoneId}`) }}
-                  </p>
-                  <div
-                    class="tap-hint"
-                    v-if="
-                      ['stage', 'vendors', 'workshop', 'social'].includes(
-                        hoveredZoneId,
-                      )
-                    "
-                  >
-                    <i class="fa-solid fa-hand-pointer"></i>
-                    <span>{{
-                      isEn
-                        ? "Click to view event timetable"
-                        : "點擊以查看活動時程"
-                    }}</span>
-                  </div>
-                </div>
-              </template>
-
-              <!-- 5. Default State -->
-              <template v-else>
-                <div class="sidebar-placeholder">
-                  <i class="fa-solid fa-map-location-dot placeholder-icon"></i>
-                  <p>{{ t("venue.hint") }}</p>
-                </div>
-              </template>
-            </div>
-          </div>
-        </div>
+        <VenueInfoSidebar
+          :selected-zone-id="selectedZoneId"
+          :selected-booth="selectedBooth"
+          :hovered-zone-id="hoveredZoneId"
+          :hovered-booth="hoveredBooth"
+          :hovered-booth-id="hoveredBoothId"
+          :zone-events="zoneEvents"
+          :from-event-id="fromEventId"
+          @clear-selection="clearSelection"
+        />
       </div>
     </template>
   </PageLayout>
@@ -1462,15 +670,15 @@ onUnmounted(() => {
 .map-container-card {
   min-width: 0; /* Prevent grid column overflow on smaller desktops/tablets */
   padding: 1.5em;
-  border-radius: 1.25em;
+  border-radius: var(--page-surface-radius);
   background: linear-gradient(
     180deg,
     rgba(72, 38, 82, 0.75),
     rgba(72, 38, 82, 0.75)
   );
   box-shadow:
-    0 1em 2em rgba(0, 0, 0, 0.25),
-    inset 0 0 0 1px rgba(127, 100, 50, 0.12);
+    var(--page-surface-shadow),
+    inset 0 0 0 1px var(--page-surface-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1486,85 +694,6 @@ onUnmounted(() => {
   user-select: none;
   border-radius: 0.75em; /* Smooth corners for the map viewport */
   border: 1px solid rgba(255, 230, 167, 0.25); /* Gold outline border around the map */
-}
-
-/* Sidebar Wrapper & Card Styling (Prevents content-based height expansion on desktop) */
-.sidebar-column-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-@media (min-width: 951px) {
-  .sidebar-column-wrapper {
-    height: 100%;
-  }
-
-  .info-sidebar-card {
-    position: absolute;
-    inset: 0;
-  }
-}
-
-@media (max-width: 950px) {
-  .sidebar-column-wrapper {
-    height: auto;
-  }
-}
-
-.info-sidebar-card {
-  display: flex;
-  flex-direction: column;
-  padding: 1.8em;
-  border-radius: 1.25em;
-  background: linear-gradient(
-    180deg,
-    rgba(46, 21, 56, 0.85),
-    rgba(29, 13, 36, 0.95)
-  );
-  box-shadow:
-    0 1em 2em rgba(0, 0, 0, 0.25),
-    inset 0 0 0 1px rgba(127, 100, 50, 0.15);
-  transition: all 0.3s ease;
-  overflow: hidden; /* Lock main container; only wrapper inside scrolls */
-}
-
-@media (max-width: 950px) {
-  .info-sidebar-card {
-    position: relative;
-    min-height: 380px;
-    max-height: 500px;
-  }
-}
-
-.info-sidebar-card.has-selection {
-  border: 1px solid rgba(255, 230, 167, 0.25);
-  box-shadow:
-    0 1em 2.5em rgba(0, 0, 0, 0.35),
-    0 0 15px rgba(255, 230, 167, 0.05);
-}
-
-.clear-selection-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 1.25rem;
-  cursor: pointer;
-  padding: 0.3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-  z-index: 10;
-}
-
-.clear-selection-btn:hover {
-  color: var(--color-gold);
-  background: rgba(255, 255, 255, 0.05);
-  transform: scale(1.1);
 }
 
 /* SVG styling */
@@ -1623,7 +752,7 @@ onUnmounted(() => {
 .control-btn:hover {
   background: var(--color-nav-bg);
   border-color: var(--color-gold);
-  color: #fff;
+  color: var(--color-text-light);
   box-shadow: 0 0 8px var(--color-gold);
 }
 
@@ -1671,7 +800,7 @@ onUnmounted(() => {
   font-family: NotoSansTC-Regular, "Noto Sans TC", sans-serif;
   font-size: 13.5px;
   font-weight: 700;
-  fill: #ffffff;
+  fill: var(--color-text-light);
   opacity: 0.65;
   pointer-events: none;
   transition: all 0.25s ease;
@@ -1684,7 +813,7 @@ onUnmounted(() => {
   font-family: NotoSansTC-Regular, "Noto Sans TC", sans-serif;
   font-size: 12.5px;
   font-weight: 700;
-  fill: #ffffff;
+  fill: var(--color-text-light);
   opacity: 0.55;
   pointer-events: none;
   user-select: none;
@@ -1709,12 +838,12 @@ onUnmounted(() => {
 .stage-group:hover .shape-stage,
 .stage-group.active .shape-stage {
   fill-opacity: 0.38;
-  stroke: #ffffff;
+  stroke: var(--color-text-light);
   filter: url(#neon-glow);
 }
 .stage-group:hover .font-stage path,
 .stage-group.active .font-stage path {
-  fill: #ffffff;
+  fill: var(--color-text-light);
 }
 
 /* Vendor Alley Color System */
@@ -1728,12 +857,12 @@ onUnmounted(() => {
 .vendors-group:hover .shape-vendors,
 .vendors-group.active .shape-vendors {
   fill-opacity: 0.28;
-  stroke: #ffffff;
+  stroke: var(--color-text-light);
   filter: url(#neon-glow);
 }
 .vendors-group:hover .font-vendors path,
 .vendors-group.active .font-vendors path {
-  fill: #ffffff;
+  fill: var(--color-text-light);
 }
 
 /* Workshop Color System */
@@ -1747,12 +876,12 @@ onUnmounted(() => {
 .workshop-group:hover .shape-workshop,
 .workshop-group.active .shape-workshop {
   fill-opacity: 0.38;
-  stroke: #ffffff;
+  stroke: var(--color-text-light);
   filter: url(#neon-glow);
 }
 .workshop-group:hover .font-workshop path,
 .workshop-group.active .font-workshop path {
-  fill: #ffffff;
+  fill: var(--color-text-light);
 }
 
 /* Social Area Color System */
@@ -1766,12 +895,12 @@ onUnmounted(() => {
 .social-group:hover .shape-social,
 .social-group.active .shape-social {
   fill-opacity: 0.38;
-  stroke: #ffffff;
+  stroke: var(--color-text-light);
   filter: url(#neon-glow);
 }
 .social-group:hover .font-social path,
 .social-group.active .font-social path {
-  fill: #ffffff;
+  fill: var(--color-text-light);
 }
 
 /* Exhibition Color System */
@@ -1782,7 +911,7 @@ onUnmounted(() => {
 .exhibition-group:hover .shape-exhibition,
 .exhibition-group.active .shape-exhibition {
   fill-opacity: 0.38;
-  stroke: #ffffff;
+  stroke: var(--color-text-light);
   filter: url(#neon-glow);
 }
 
@@ -1794,27 +923,27 @@ onUnmounted(() => {
 .checkin-group:hover .shape-checkin,
 .checkin-group.active .shape-checkin {
   fill-opacity: 0.38;
-  stroke: #ffffff;
+  stroke: var(--color-text-light);
   filter: url(#neon-glow);
 }
 
 /* Bar Zone Color System */
 .shape-bar {
-  fill: #ffbdde;
-  stroke: #ffbdde;
+  fill: var(--color-pink);
+  stroke: var(--color-pink);
 }
 .font-bar path {
-  fill: #ffbdde;
+  fill: var(--color-pink);
 }
 .bar-group:hover .shape-bar,
 .bar-group.active .shape-bar {
   fill-opacity: 0.38;
-  stroke: #ffffff;
+  stroke: var(--color-text-light);
   filter: url(#neon-glow);
 }
 .bar-group:hover .font-bar path,
 .bar-group.active .font-bar path {
-  fill: #ffffff;
+  fill: var(--color-text-light);
 }
 
 /* Entrance Color System (Static reference only) */
@@ -1852,315 +981,13 @@ onUnmounted(() => {
 .booth-group:hover .booth-rect,
 .booth-group.active .booth-rect {
   fill: var(--color-gold);
-  stroke: #ffffff;
+  stroke: var(--color-text-light);
   filter: drop-shadow(0 0 4px var(--color-gold));
   transform: scale(1.18);
 }
 
 .booth-group:hover .booth-label,
 .booth-group.active .booth-label {
-  fill: #120b18;
-}
-
-/* Sidebar Styling */
-.sidebar-content-wrapper {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto; /* Internal scrolling within stretched side panel */
-  min-height: 0; /* Flexbox safety constraint to enable internal scrollbar */
-  padding-right: 0.4rem;
-}
-
-.sidebar-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.45);
-  gap: 1.2rem;
-  margin: auto 0;
-  padding: 2rem 0;
-}
-
-.placeholder-icon {
-  font-size: 3rem;
-  color: rgba(255, 230, 167, 0.25);
-  animation: float-slow 4s ease-in-out infinite;
-}
-
-@keyframes float-slow {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-.sidebar-item-preview,
-.sidebar-item-detail {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.6rem;
-  animation: fadeIn 0.3s ease-out;
-  width: 100%;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.preview-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  border-radius: 99px;
-  text-transform: uppercase;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.zone-badge-stage {
-  background-color: rgba(186, 85, 211, 0.75);
-}
-.zone-badge-vendors {
-  background-color: rgba(255, 215, 0, 0.75);
-  color: #120b18;
-}
-.zone-badge-workshop {
-  background-color: rgba(255, 170, 130, 0.75);
-}
-.zone-badge-social {
-  background-color: rgba(26, 255, 236, 0.75);
-  color: #120b18;
-}
-.zone-badge-exhibition {
-  background-color: rgba(163, 161, 160, 0.75);
-  color: #120b18;
-}
-.zone-badge-checkin {
-  background-color: rgba(255, 94, 98, 0.75);
-  color: #ffffff;
-}
-.zone-badge-bar {
-  background-color: rgba(255, 189, 222, 0.75);
-  color: #120b18;
-}
-.zone-badge-entrance {
-  background-color: rgba(255, 51, 102, 0.75);
-}
-.booth-badge {
-  background-color: var(--color-gold);
-  color: #120b18;
-}
-
-.sidebar-item-preview h3,
-.sidebar-item-detail h3 {
-  margin: 0.2rem 0;
-  font-size: clamp(1.4rem, 2vw, 1.8rem);
-  color: #ffffff;
-  text-shadow: 0 0 8px rgba(255, 230, 167, 0.35);
-  line-height: 1.25;
-}
-
-.preview-desc,
-.detail-desc {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
-  white-space: pre-line;
-  overflow-wrap: anywhere;
-}
-
-.sidebar-section-title {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 700;
-  color: var(--color-gold);
-  border-bottom: 1px solid rgba(255, 230, 167, 0.15);
-  width: 100%;
-  padding-bottom: 0.25rem;
-  margin-top: 0.8rem;
-  opacity: 0.85;
-}
-
-.tap-hint {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.82rem;
-  color: var(--color-gold);
-  opacity: 0.75;
-  margin-top: 0.6rem;
-}
-
-/* Event schedules in sidebar */
-.sidebar-events-section,
-.sidebar-links-section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  width: 100%;
-}
-
-.events-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  margin-top: 0.2rem;
-  width: 100%;
-}
-
-.event-item-wrapper {
-  display: block;
-  text-decoration: none;
-  width: 100%;
-}
-
-.event-item-wrapper.interactive-wrapper {
-  cursor: pointer;
-}
-
-.event-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-left: 3px solid var(--color-gold);
-  padding: 0.6rem 0.8rem;
-  border-radius: 0 6px 6px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.02);
-  border-right: 1px solid rgba(255, 255, 255, 0.02);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-  transition: all 0.2s ease;
-  gap: 0.6rem;
-  width: 100%;
-}
-
-.event-item-wrapper.interactive-wrapper:hover .event-item {
-  background-color: rgba(255, 255, 255, 0.08) !important;
-  transform: translateX(4px);
-}
-
-.event-item.active-event-item {
-  border-left-width: 5px;
-  box-shadow: 0 0 12px rgba(255, 230, 167, 0.15);
-}
-
-.event-item-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.event-item-action {
-  display: flex;
-  align-items: center;
-  color: rgba(255, 255, 255, 0.3);
-  font-size: 0.8rem;
-  transition: all 0.2s ease;
-  padding-left: 0.2rem;
-}
-
-.event-item-wrapper.interactive-wrapper:hover .event-item-action {
-  color: var(--color-gold);
-  transform: translateX(2px);
-}
-
-.event-time {
-  font-size: 0.8rem;
-  font-weight: 700;
-  margin-bottom: 0.2rem;
-}
-
-.event-title {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 0.15rem;
-}
-
-.event-desc {
-  font-size: 0.85rem;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.no-events-text {
-  margin: 0;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.5);
-  font-style: italic;
-}
-
-/* Booth links in sidebar */
-.links-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.2rem;
-}
-
-.booth-social-link {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.45rem 0.8rem;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: all 0.2s;
-  border: 1px solid rgba(255, 230, 167, 0.1);
-}
-
-.booth-social-link:hover {
-  background: var(--color-gold);
-  color: #120b18;
-  border-color: var(--color-gold);
-  transform: translateY(-1px);
-}
-
-.booth-cta-section {
-  margin-top: 1rem;
-  margin-bottom: 1.25rem;
-}
-
-.view-detail-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.7rem 1rem;
-  border-radius: 8px;
-  background: var(--color-gold);
-  color: #120b18;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.85rem;
-  transition: all 0.25s ease;
-  border: 1px solid var(--color-gold);
-}
-
-.view-detail-btn:hover {
-  background: transparent;
-  color: var(--color-gold);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 230, 167, 0.2);
+  fill: var(--color-bg-dark);
 }
 </style>

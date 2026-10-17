@@ -2,8 +2,6 @@
 import { ref, computed } from "vue";
 
 const { t } = useI18n();
-const route = useRoute();
-const siteUrl = "https://twbronycon.org";
 const contactEmail = "twbronycon2@gmail.com";
 
 definePageMeta({
@@ -89,16 +87,9 @@ const copyEmail = async () => {
   }
 };
 
-useSeoMeta({
+usePageSeo({
   title: () => t("contactPage.title"),
-  ogTitle: () => t("contactPage.title"),
-  twitterTitle: () => t("contactPage.title"),
   description: () => t("contactPage.subtitle"),
-  ogDescription: () => t("contactPage.subtitle"),
-  twitterDescription: () => t("contactPage.subtitle"),
-  ogImage: `${siteUrl}/img/text-logo.avif`,
-  twitterImage: `${siteUrl}/img/text-logo.avif`,
-  ogUrl: computed(() => `${siteUrl}${route.path}`),
 });
 </script>
 
@@ -251,8 +242,8 @@ useSeoMeta({
   height: 100%;
   box-sizing: border-box;
   padding: 1.8rem;
-  background: rgba(20, 10, 25, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border-subtle);
   border-radius: 1rem;
   min-width: 0;
 }
@@ -283,7 +274,7 @@ useSeoMeta({
   margin: 0 0 1.5rem 0;
   font-size: 0.95rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-text-body);
 }
 
 .social-list {
@@ -300,9 +291,9 @@ useSeoMeta({
   gap: 1rem;
   padding: 0.8rem 1.2rem;
   border-radius: 0.6rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: var(--color-control-bg);
+  border: 1px solid var(--color-border-muted);
+  color: var(--color-text-light);
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
@@ -322,7 +313,7 @@ useSeoMeta({
 /* Email Display Box */
 .email-display-box {
   background: rgba(10, 5, 15, 0.6);
-  border: 1px solid rgba(226, 184, 102, 0.25);
+  border: 1px solid var(--color-antique-gold-border);
   border-radius: 0.8rem;
   padding: 1.2rem;
   display: flex;
@@ -385,7 +376,7 @@ useSeoMeta({
 .email-address {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #ffffff;
+  color: var(--color-text-light);
   text-decoration: none;
   transition: color 0.25s ease;
   word-break: break-all;
@@ -438,8 +429,8 @@ useSeoMeta({
 
 .copy-btn {
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-light);
 }
 
 .copy-btn:hover {
@@ -450,7 +441,7 @@ useSeoMeta({
 .send-btn {
   background: var(--color-gold);
   border: none;
-  color: #140a1e;
+  color: var(--color-bg-deep);
 }
 
 .send-btn:hover {
@@ -470,13 +461,13 @@ useSeoMeta({
 .topics-section h4 {
   margin: 0;
   font-size: 1rem;
-  color: #ffffff;
+  color: var(--color-text-light);
 }
 
 .topics-desc {
   margin: 0;
   font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-muted);
 }
 
 .category-pills {
@@ -491,9 +482,9 @@ useSeoMeta({
   gap: 0.5rem;
   padding: 0.45rem 0.85rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--color-control-bg);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-text-body);
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -502,11 +493,11 @@ useSeoMeta({
 
 .category-pill:hover {
   border-color: rgba(226, 184, 102, 0.5);
-  color: #ffffff;
+  color: var(--color-text-light);
 }
 
 .category-pill.active {
-  background: rgba(226, 184, 102, 0.15);
+  background: var(--color-antique-gold-tint);
   border-color: var(--color-gold);
   color: var(--color-gold);
   font-weight: 600;

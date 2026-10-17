@@ -6,6 +6,11 @@ const localePath = useLocalePath();
 const isNavOpen = ref(false);
 const openSubmenu = ref<string | null>(null);
 
+function closeNavigation(): void {
+  isNavOpen.value = false;
+  openSubmenu.value = null;
+}
+
 const currentTime = ref(Date.now());
 let timer: ReturnType<typeof setInterval> | null = null;
 
@@ -29,8 +34,7 @@ const toggleSubmenu = (name: string) => {
 const closeMenus = (e: MouseEvent) => {
   const target = e.target as HTMLElement;
   if (!target.closest(".top-nav") && !target.closest(".nav-toggle")) {
-    isNavOpen.value = false;
-    openSubmenu.value = null;
+    closeNavigation();
   }
 };
 
@@ -67,38 +71,18 @@ onUnmounted(() => {
     :class="{ open: isNavOpen }"
     :aria-label="$t('menu.navLabel')"
   >
-    <NuxtLink
-      :to="localePath('/')"
-      @click="
-        isNavOpen = false;
-        openSubmenu = null;
-      "
-      >{{ $t("menu.home") }}</NuxtLink
-    >
-    <NuxtLink
-      :to="localePath('/news')"
-      @click="
-        isNavOpen = false;
-        openSubmenu = null;
-      "
-      >{{ $t("menu.news") }}</NuxtLink
-    >
-    <NuxtLink
-      :to="localePath('/ticket')"
-      @click="
-        isNavOpen = false;
-        openSubmenu = null;
-      "
-      >{{ $t("menu.ticket") }}</NuxtLink
-    >
-    <NuxtLink
-      :to="localePath('/schedule')"
-      @click="
-        isNavOpen = false;
-        openSubmenu = null;
-      "
-      >{{ $t("menu.schedule") }}</NuxtLink
-    >
+    <NuxtLink :to="localePath('/')" @click="closeNavigation">{{
+      $t("menu.home")
+    }}</NuxtLink>
+    <NuxtLink :to="localePath('/news')" @click="closeNavigation">{{
+      $t("menu.news")
+    }}</NuxtLink>
+    <NuxtLink :to="localePath('/ticket')" @click="closeNavigation">{{
+      $t("menu.ticket")
+    }}</NuxtLink>
+    <NuxtLink :to="localePath('/schedule')" @click="closeNavigation">{{
+      $t("menu.schedule")
+    }}</NuxtLink>
 
     <ul class="menu">
       <li class="menu-group" :class="{ open: openSubmenu === 'apply' }">
@@ -146,30 +130,15 @@ onUnmounted(() => {
         </ul>
       </li>
     </ul>
-    <NuxtLink
-      :to="localePath('/venue')"
-      @click="
-        isNavOpen = false;
-        openSubmenu = null;
-      "
-      >{{ $t("menu.venue") }}</NuxtLink
-    >
-    <NuxtLink
-      :to="localePath('/booths')"
-      @click="
-        isNavOpen = false;
-        openSubmenu = null;
-      "
-      >{{ $t("menu.booths") }}</NuxtLink
-    >
-    <NuxtLink
-      :to="localePath('/transport')"
-      @click="
-        isNavOpen = false;
-        openSubmenu = null;
-      "
-      >{{ $t("menu.transport") }}</NuxtLink
-    >
+    <NuxtLink :to="localePath('/venue')" @click="closeNavigation">{{
+      $t("menu.venue")
+    }}</NuxtLink>
+    <NuxtLink :to="localePath('/booths')" @click="closeNavigation">{{
+      $t("menu.booths")
+    }}</NuxtLink>
+    <NuxtLink :to="localePath('/transport')" @click="closeNavigation">{{
+      $t("menu.transport")
+    }}</NuxtLink>
     <ul class="menu">
       <li class="menu-group" :class="{ open: openSubmenu === 'about' }">
         <button
@@ -187,44 +156,24 @@ onUnmounted(() => {
           :aria-hidden="openSubmenu !== 'about'"
         >
           <li>
-            <NuxtLink
-              :to="localePath('/mascot')"
-              @click="
-                isNavOpen = false;
-                openSubmenu = null;
-              "
-              >{{ $t("menu.aboutSub.mascot") }}</NuxtLink
-            >
+            <NuxtLink :to="localePath('/mascot')" @click="closeNavigation">{{
+              $t("menu.aboutSub.mascot")
+            }}</NuxtLink>
           </li>
           <li>
-            <NuxtLink
-              :to="localePath('/crew')"
-              @click="
-                isNavOpen = false;
-                openSubmenu = null;
-              "
-              >{{ $t("menu.aboutSub.crew") }}</NuxtLink
-            >
+            <NuxtLink :to="localePath('/crew')" @click="closeNavigation">{{
+              $t("menu.aboutSub.crew")
+            }}</NuxtLink>
           </li>
           <li>
-            <NuxtLink
-              :to="localePath('/coc')"
-              @click="
-                isNavOpen = false;
-                openSubmenu = null;
-              "
-              >{{ $t("menu.aboutSub.coc") }}</NuxtLink
-            >
+            <NuxtLink :to="localePath('/coc')" @click="closeNavigation">{{
+              $t("menu.aboutSub.coc")
+            }}</NuxtLink>
           </li>
           <li>
-            <NuxtLink
-              :to="localePath('/contact')"
-              @click="
-                isNavOpen = false;
-                openSubmenu = null;
-              "
-              >{{ $t("menu.aboutSub.contact") }}</NuxtLink
-            >
+            <NuxtLink :to="localePath('/contact')" @click="closeNavigation">{{
+              $t("menu.aboutSub.contact")
+            }}</NuxtLink>
           </li>
         </ul>
       </li>
@@ -286,7 +235,7 @@ onUnmounted(() => {
   margin: 0;
   padding: 0.35em 0.3em;
 
-  color: #fff;
+  color: var(--color-text-light);
   font-family: inherit;
   font-size: clamp(0.86em, 1.35vw, 1.02em);
   line-height: 1.2;
@@ -459,7 +408,7 @@ onUnmounted(() => {
     width: 22px;
     height: 2px;
 
-    background: #fff;
+    background: var(--color-text-light);
     border-radius: 999px;
 
     transition: 0.25s ease;

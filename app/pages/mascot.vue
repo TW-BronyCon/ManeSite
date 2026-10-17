@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed } from "vue";
+import { SITE_ORIGIN } from "~/utils/site";
 
 const { t } = useI18n();
-const route = useRoute();
-const siteUrl = "https://twbronycon.org";
 
 definePageMeta({
   underDevelopment: false,
@@ -13,20 +12,6 @@ definePageMeta({
 const isLightboxOpen = ref(false);
 const currentImage = computed(() => "/img/mascot.avif");
 
-const handleKeyDown = (e: KeyboardEvent) => {
-  if (e.key === "Escape") {
-    isLightboxOpen.value = false;
-  }
-};
-
-onMounted(() => {
-  window.addEventListener("keydown", handleKeyDown);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("keydown", handleKeyDown);
-});
-
 const paletteColors = [
   { nameKey: "mascotPage.colors.newPink", hex: "#FDD0E5" },
   { nameKey: "mascotPage.colors.mattePlum", hex: "#AD87B0" },
@@ -34,18 +19,11 @@ const paletteColors = [
   { nameKey: "mascotPage.colors.wellRead", hex: "#B42F33" },
 ];
 
-useSeoMeta({
+usePageSeo({
   title: () => t("mascotPage.title"),
-  ogTitle: () => t("mascotPage.title"),
-  twitterTitle: () => t("mascotPage.title"),
   description: () => t("mascotPage.conceptDesc"),
-  ogDescription: () => t("mascotPage.conceptDesc"),
-  twitterDescription: () => t("mascotPage.conceptDesc"),
-  ogImage: `${siteUrl}/img/mascot.avif`,
-  twitterImage: `${siteUrl}/img/mascot.avif`,
-  ogImageWidth: null,
-  ogImageHeight: null,
-  ogUrl: computed(() => `${siteUrl}${route.path}`),
+  image: `${SITE_ORIGIN}/img/mascot.avif`,
+  originalImageSize: true,
 });
 </script>
 
@@ -115,31 +93,13 @@ useSeoMeta({
       </div>
 
       <!-- Lightbox Modal -->
-      <Teleport to="body">
-        <Transition name="lightbox-fade">
-          <div
-            v-if="isLightboxOpen && currentImage"
-            class="lightbox-overlay"
-            @click="isLightboxOpen = false"
-          >
-            <button
-              class="lightbox-close"
-              type="button"
-              @click="isLightboxOpen = false"
-              :aria-label="t('common.close')"
-            >
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="lightbox-content">
-              <img
-                :src="currentImage"
-                :alt="t('mascotPage.title')"
-                class="lightbox-img"
-              />
-            </div>
-          </div>
-        </Transition>
-      </Teleport>
+      <ImageLightbox
+        v-model:open="isLightboxOpen"
+        :src="currentImage"
+        :alt="t('mascotPage.title')"
+        :close-on-escape="true"
+        overlay-cursor="zoom-out"
+      />
     </template>
   </PageLayout>
 </template>
@@ -173,10 +133,10 @@ useSeoMeta({
   padding: 2rem;
   background: radial-gradient(
     circle at center,
-    rgba(226, 184, 102, 0.15) 0%,
+    var(--color-antique-gold-tint) 0%,
     rgba(20, 10, 30, 0.6) 70%
   );
-  border: 1px solid rgba(226, 184, 102, 0.25);
+  border: 1px solid var(--color-antique-gold-border);
   border-radius: 1.2rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   text-align: center;
@@ -239,8 +199,8 @@ useSeoMeta({
 
 .mascot-card {
   padding: 1.5rem;
-  background: rgba(20, 10, 25, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border-subtle);
   border-radius: 0.8rem;
 }
 
@@ -254,7 +214,7 @@ useSeoMeta({
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-text-body);
 }
 
 .attributes-grid {
@@ -295,8 +255,8 @@ useSeoMeta({
 
 .palette-card {
   padding: 1.2rem;
-  background: rgba(20, 10, 25, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border-subtle);
   border-radius: 0.8rem;
 }
 
@@ -322,95 +282,13 @@ useSeoMeta({
   justify-content: center;
   padding-bottom: 0.3rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-border-strong);
 }
 
 .swatch-label {
   font-size: 0.65rem;
   font-weight: bold;
-  color: #fff;
+  color: var(--color-text-light);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-}
-
-/* Lightbox Styles */
-.lightbox-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(10, 5, 20, 0.95);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: zoom-out;
-}
-
-.lightbox-close {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 230, 167, 0.15);
-  color: #ffffff;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  font-size: 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  z-index: 1010;
-}
-
-.lightbox-close:hover {
-  background: var(--color-gold);
-  color: #120b18;
-  border-color: var(--color-gold);
-  transform: scale(1.1);
-}
-
-.lightbox-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: zoom-out;
-}
-
-.lightbox-img {
-  max-width: 90vw;
-  max-height: 90vh;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 230, 167, 0.15);
-  cursor: zoom-out;
-  transition: transform 0.3s ease;
-}
-
-/* Lightbox Fade Transition */
-.lightbox-fade-enter-active,
-.lightbox-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.lightbox-fade-enter-from,
-.lightbox-fade-leave-to {
-  opacity: 0;
-}
-
-.lightbox-fade-enter-active .lightbox-img {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.lightbox-fade-enter-from .lightbox-img {
-  transform: scale(0.9);
 }
 </style>

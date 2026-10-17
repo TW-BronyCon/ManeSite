@@ -1,23 +1,6 @@
 <script setup lang="ts">
-const siteUrl = "https://twbronycon.org";
+import { SITE_ORIGIN } from "~/utils/site";
 const { t, locale } = useI18n();
-
-useSeoMeta({
-  title: () => t("seo.title"),
-  description: () => t("seo.description"),
-  ogSiteName: () => t("seo.ogSiteName"),
-  ogType: "website",
-  ogUrl: siteUrl,
-  ogDescription: () => t("seo.description"),
-  ogImage: `${siteUrl}/img/text-logo.avif`,
-  ogImageWidth: 1200,
-  ogImageHeight: 1200,
-  ogTitle: () => t("seo.ogSiteName"),
-  twitterTitle: () => t("seo.ogSiteName"),
-  twitterDescription: () => t("seo.description"),
-  twitterCard: "summary_large_image",
-  twitterImage: `${siteUrl}/img/text-logo.avif`,
-});
 
 useHead({
   htmlAttrs: {
@@ -66,6 +49,23 @@ useHead({
       type: "text/javascript",
     },
   ],
+});
+
+useSeoMeta({
+  title: () => t("seo.title"),
+  description: () => t("seo.description"),
+  ogSiteName: () => t("seo.ogSiteName"),
+  ogType: "website",
+  ogUrl: SITE_ORIGIN,
+  ogDescription: () => t("seo.description"),
+  ogImage: `${SITE_ORIGIN}/img/text-logo.avif`,
+  ogImageWidth: 1200,
+  ogImageHeight: 1200,
+  ogTitle: () => t("seo.ogSiteName"),
+  twitterTitle: () => t("seo.ogSiteName"),
+  twitterDescription: () => t("seo.description"),
+  twitterCard: "summary_large_image",
+  twitterImage: `${SITE_ORIGIN}/img/text-logo.avif`,
 });
 </script>
 

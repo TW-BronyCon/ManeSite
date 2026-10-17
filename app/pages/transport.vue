@@ -5,19 +5,9 @@ definePageMeta({
   underDevelopment: false,
 });
 
-const route = useRoute();
-const siteUrl = "https://twbronycon.org";
-
-useSeoMeta({
+usePageSeo({
   title: () => t("transport.title"),
-  ogTitle: () => t("transport.title"),
-  twitterTitle: () => t("transport.title"),
   description: () => t("seo.description"),
-  ogDescription: () => t("seo.description"),
-  twitterDescription: () => t("seo.description"),
-  ogImage: `${siteUrl}/img/text-logo.avif`,
-  twitterImage: `${siteUrl}/img/text-logo.avif`,
-  ogUrl: computed(() => `${siteUrl}${route.path}`),
 });
 </script>
 
@@ -114,8 +104,8 @@ useSeoMeta({
   gap: 1.2rem;
   padding: 1.5rem;
   border-radius: 0.8rem;
-  background: rgba(20, 10, 25, 0.55);
-  border: 1px solid rgba(255, 230, 167, 0.08);
+  background: var(--color-card-bg-strong);
+  border: 1px solid var(--color-gold-border-subtle);
   transition: all 0.3s ease;
 }
 
@@ -151,7 +141,7 @@ useSeoMeta({
 .card-text h5 {
   margin: 0 0 0.5rem 0;
   font-size: 1.25rem;
-  color: #ffffff;
+  color: var(--color-text-light);
   text-shadow: 0 0 8px rgba(255, 230, 167, 0.2);
 }
 
@@ -159,7 +149,7 @@ useSeoMeta({
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-text-body);
 }
 
 .map-embed-col {
@@ -173,7 +163,7 @@ useSeoMeta({
   min-height: 350px;
   border-radius: 1rem;
   overflow: hidden;
-  border: 1px solid rgba(255, 230, 167, 0.15);
+  border: 1px solid var(--color-gold-border);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
 }
 </style>

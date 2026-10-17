@@ -4,6 +4,7 @@
   "private": true,
   "license": "GPL-3.0-or-later",
   "scripts": {
+    "test": "node --test tests/content.test.mjs",
     "build": "npm run sync:avatars && nuxt build",
     "dev": "npm run sync:avatars && nuxt dev",
     "generate": "npm run sync:avatars && nuxt generate",

@@ -73,7 +73,7 @@ const getPartnerAlt = (partner: PartnerSite): string => {
   cursor: pointer;
   outline: none;
   opacity: 0.75;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s var(--ease-pop);
 }
 
 .partner-logo {
