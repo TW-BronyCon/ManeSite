@@ -10,19 +10,9 @@ definePageMeta({
   underDevelopment: false,
 });
 
-const route = useRoute();
-const siteUrl = "https://twbronycon.org";
-
-useSeoMeta({
+usePageSeo({
   title: () => t("booth.list.title"),
-  ogTitle: () => t("booth.list.title"),
-  twitterTitle: () => t("booth.list.title"),
   description: () => t("booth.list.subtitle"),
-  ogDescription: () => t("booth.list.subtitle"),
-  twitterDescription: () => t("booth.list.subtitle"),
-  ogImage: `${siteUrl}/img/text-logo.avif`,
-  twitterImage: `${siteUrl}/img/text-logo.avif`,
-  ogUrl: computed(() => `${siteUrl}${route.path}`),
 });
 </script>
 
@@ -148,7 +138,7 @@ useSeoMeta({
 
 .map-link-btn:hover {
   background: var(--color-gold);
-  color: #120b18;
+  color: var(--color-bg-dark);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 230, 167, 0.2);
 }
@@ -176,8 +166,8 @@ useSeoMeta({
   display: flex;
   flex-direction: column;
   border-radius: 12px;
-  background: rgba(20, 10, 25, 0.55);
-  border: 1px solid rgba(255, 230, 167, 0.08);
+  background: var(--color-card-bg-strong);
+  border: 1px solid var(--color-gold-border-subtle);
   overflow: hidden;
   transition: all 0.3s ease;
   width: 100%;
@@ -195,7 +185,7 @@ useSeoMeta({
   aspect-ratio: 3 / 2;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid rgba(255, 230, 167, 0.08);
+  border-bottom: 1px solid var(--color-gold-border-subtle);
 }
 
 .booth-card-image img {
@@ -229,7 +219,7 @@ useSeoMeta({
 .booth-card-title {
   margin: 0 0 0.5rem 0;
   font-size: 1.2rem;
-  color: #ffffff;
+  color: var(--color-text-light);
   text-shadow: 0 0 8px rgba(255, 230, 167, 0.15);
 }
 
@@ -261,7 +251,7 @@ useSeoMeta({
   height: 32px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 230, 167, 0.08);
+  border: 1px solid var(--color-gold-border-subtle);
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   font-size: 0.9rem;
@@ -270,7 +260,7 @@ useSeoMeta({
 
 .quick-link:hover {
   background: var(--color-gold);
-  color: #120b18;
+  color: var(--color-bg-dark);
   border-color: var(--color-gold);
   transform: translateY(-2px);
 }
@@ -288,7 +278,7 @@ useSeoMeta({
   padding: 0.6rem 1rem;
   border-radius: 6px;
   background: var(--color-gold);
-  color: #120b18;
+  color: var(--color-bg-dark);
   text-decoration: none;
   font-weight: 700;
   font-size: 0.85rem;

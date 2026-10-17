@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { booths } from "~/data/boothData";
+import { toSiteImageUrl } from "~/utils/site";
 
 const { t, locale } = useI18n();
 const route = useRoute();
@@ -17,20 +18,6 @@ const activeImageIdx = ref(0);
 // Lightbox state
 const isLightboxOpen = ref(false);
 
-const handleKeyDown = (e: KeyboardEvent) => {
-  if (e.key === "Escape") {
-    isLightboxOpen.value = false;
-  }
-};
-
-onMounted(() => {
-  window.addEventListener("keydown", handleKeyDown);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("keydown", handleKeyDown);
-});
-
 const boothImages = computed(() => {
   if (!booth.value) return [];
   // Fallback to booth.image if booth.images is not defined
@@ -40,8 +27,6 @@ const boothImages = computed(() => {
 const currentImage = computed(() => {
   return boothImages.value[activeImageIdx.value] || "";
 });
-
-const siteUrl = "https://twbronycon.org";
 
 const pageTitle = computed(() =>
   booth.value
@@ -55,32 +40,15 @@ const pageDesc = computed(() =>
     : t("booth.notFound.message"),
 );
 
-const pageImage = computed(() => {
-  const img = boothImages.value[0] || currentImage.value;
-  if (!img) return `${siteUrl}/img/text-logo.avif`;
-  if (
-    img.startsWith("http://") ||
-    img.startsWith("https://") ||
-    img.startsWith("data:")
-  ) {
-    return img;
-  }
-  const cleanPath = img.startsWith("/") ? img : `/${img}`;
-  return `${siteUrl}${cleanPath}`;
-});
+const pageImage = computed(() =>
+  toSiteImageUrl(boothImages.value[0] || currentImage.value),
+);
 
-useSeoMeta({
+usePageSeo({
   title: pageTitle,
-  ogTitle: pageTitle,
-  twitterTitle: pageTitle,
   description: pageDesc,
-  ogDescription: pageDesc,
-  twitterDescription: pageDesc,
-  ogImage: pageImage,
-  twitterImage: pageImage,
-  ogUrl: computed(() => `${siteUrl}${route.path}`),
-  ogImageWidth: null,
-  ogImageHeight: null,
+  image: pageImage,
+  originalImageSize: true,
 });
 </script>
 
@@ -201,31 +169,13 @@ useSeoMeta({
       </div>
 
       <!-- Lightbox Modal -->
-      <Teleport to="body">
-        <Transition name="lightbox-fade">
-          <div
-            v-if="isLightboxOpen && currentImage"
-            class="lightbox-overlay"
-            @click="isLightboxOpen = false"
-          >
-            <button
-              class="lightbox-close"
-              type="button"
-              @click="isLightboxOpen = false"
-              :aria-label="t('common.close')"
-            >
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="lightbox-content">
-              <img
-                :src="currentImage"
-                :alt="booth ? booth.name[isEn ? 'en' : 'zh'] : ''"
-                class="lightbox-img"
-              />
-            </div>
-          </div>
-        </Transition>
-      </Teleport>
+      <ImageLightbox
+        v-model:open="isLightboxOpen"
+        :src="currentImage"
+        :alt="booth ? booth.name[isEn ? 'en' : 'zh'] : ''"
+        :close-on-escape="true"
+        overlay-cursor="zoom-out"
+      />
     </template>
   </PageLayout>
 </template>
@@ -265,7 +215,7 @@ useSeoMeta({
   aspect-ratio: 3 / 2;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(255, 230, 167, 0.15);
+  border: 1px solid var(--color-gold-border);
   background: rgba(0, 0, 0, 0.2);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   display: flex;
@@ -301,7 +251,7 @@ useSeoMeta({
   height: 60px;
   border-radius: 6px;
   overflow: hidden;
-  border: 2px solid rgba(255, 230, 167, 0.15);
+  border: 2px solid var(--color-gold-border);
   background: transparent;
   padding: 0;
   cursor: pointer;
@@ -334,15 +284,15 @@ useSeoMeta({
 .info-card {
   padding: 1.5rem;
   border-radius: 12px;
-  background: rgba(20, 10, 25, 0.55);
-  border: 1px solid rgba(255, 230, 167, 0.08);
+  background: var(--color-card-bg-strong);
+  border: 1px solid var(--color-gold-border-subtle);
 }
 
 .section-title {
   margin: 0 0 1rem 0;
   font-size: 1.15rem;
   color: var(--color-gold);
-  border-bottom: 1px solid rgba(255, 230, 167, 0.15);
+  border-bottom: 1px solid var(--color-gold-border);
   padding-bottom: 0.5rem;
 }
 
@@ -369,7 +319,7 @@ useSeoMeta({
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 230, 167, 0.1);
-  color: #ffffff;
+  color: var(--color-text-light);
   text-decoration: none;
   font-weight: 600;
   transition: all 0.25s ease;
@@ -413,7 +363,7 @@ useSeoMeta({
 .back-map-btn:hover,
 .back-list-btn:hover {
   background: var(--color-gold);
-  color: #120b18;
+  color: var(--color-bg-dark);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 230, 167, 0.25);
 }
@@ -426,89 +376,7 @@ useSeoMeta({
 
 .not-found-message {
   font-size: 1.15rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-muted);
   margin-bottom: 2rem;
-}
-
-/* Lightbox Styles */
-.lightbox-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(10, 5, 20, 0.95);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: zoom-out;
-}
-
-.lightbox-close {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 230, 167, 0.15);
-  color: #ffffff;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  font-size: 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  z-index: 1010;
-}
-
-.lightbox-close:hover {
-  background: var(--color-gold);
-  color: #120b18;
-  border-color: var(--color-gold);
-  transform: scale(1.1);
-}
-
-.lightbox-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: zoom-out;
-}
-
-.lightbox-img {
-  max-width: 90vw;
-  max-height: 90vh;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 230, 167, 0.15);
-  cursor: zoom-out;
-  transition: transform 0.3s ease;
-}
-
-/* Lightbox Fade Transition */
-.lightbox-fade-enter-active,
-.lightbox-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.lightbox-fade-enter-from,
-.lightbox-fade-leave-to {
-  opacity: 0;
-}
-
-.lightbox-fade-enter-active .lightbox-img {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.lightbox-fade-enter-from .lightbox-img {
-  transform: scale(0.9);
 }
 </style>

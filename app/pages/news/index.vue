@@ -8,6 +8,8 @@ import {
   nextTick,
 } from "vue";
 import type { ComponentPublicInstance } from "vue";
+import { parseMarkdownWithFrontmatter } from "~/utils/markdown";
+import { formatNewsDate } from "~/utils/date";
 
 /**
  * News Page Component
@@ -23,21 +25,6 @@ const localePath = useLocalePath();
 
 definePageMeta({
   underDevelopment: false,
-});
-
-const route = useRoute();
-const siteUrl = "https://twbronycon.org";
-
-useSeoMeta({
-  title: () => t("newsPage.title"),
-  ogTitle: () => t("newsPage.title"),
-  twitterTitle: () => t("newsPage.title"),
-  description: () => t("newsPage.description"),
-  ogDescription: () => t("newsPage.description"),
-  twitterDescription: () => t("newsPage.description"),
-  ogImage: `${siteUrl}/img/text-logo.avif`,
-  twitterImage: `${siteUrl}/img/text-logo.avif`,
-  ogUrl: computed(() => `${siteUrl}${route.path}`),
 });
 
 type NewsPost = {
@@ -88,37 +75,8 @@ function createRandomCrack() {
   };
 }
 
-// Simple yaml-like frontmatter parser
-function parseMarkdownWithFrontmatter(raw: string) {
-  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
-  if (match) {
-    const yamlBlock = match[1] || "";
-    const markdownContent = match[2] || "";
-
-    const meta: Record<string, string> = {};
-    yamlBlock.split("\n").forEach((line) => {
-      const idx = line.indexOf(":");
-      if (idx > -1) {
-        const key = line.slice(0, idx).trim();
-        const value = line.slice(idx + 1).trim();
-        let cleanVal = value;
-        if (
-          (value.startsWith('"') && value.endsWith('"')) ||
-          (value.startsWith("'") && value.endsWith("'"))
-        ) {
-          cleanVal = value.slice(1, -1);
-        }
-        meta[key] = cleanVal;
-      }
-    });
-
-    return { meta, content: markdownContent };
-  }
-  return { meta: {} as Record<string, string>, content: raw };
-}
-
 // Import all news markdown files eagerly
-const newsMdFiles = import.meta.glob("/content/news/**/*.md", {
+const newsMdFiles = import.meta.glob<string>("/content/news/**/*.md", {
   query: "?raw",
   import: "default",
   eager: true,
@@ -142,7 +100,10 @@ const posts = computed<NewsPost[]>(() => {
     const fileLocale = match[2];
     if (!id || !fileLocale) continue;
 
-    const { meta, content } = parseMarkdownWithFrontmatter(raw as string);
+    const { meta, content } = parseMarkdownWithFrontmatter(
+      raw,
+      "strip-matching",
+    );
 
     list.push({
       id,
@@ -162,22 +123,7 @@ const posts = computed<NewsPost[]>(() => {
 
     if (!postForLocale) return [];
 
-    let formattedTime = postForLocale.time || "";
-    if (postForLocale.time) {
-      try {
-        const date = new Date(postForLocale.time);
-        if (!Number.isNaN(date.getTime())) {
-          formattedTime = date.toLocaleDateString(locale.value, {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            timeZone: "Asia/Taipei",
-          });
-        }
-      } catch (err) {
-        console.error("Failed to format date:", err);
-      }
-    }
+    const formattedTime = formatNewsDate(postForLocale.time, locale.value);
 
     return [
       {
@@ -418,6 +364,11 @@ onBeforeUnmount(() => {
 
   if (whyIntroTimer) clearTimeout(whyIntroTimer);
   if (whyIdleTimer) clearTimeout(whyIdleTimer);
+});
+
+usePageSeo({
+  title: () => t("newsPage.title"),
+  description: () => t("newsPage.description"),
 });
 </script>
 

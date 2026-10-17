@@ -195,6 +195,8 @@
   "venue": {
     "title": "會場地圖",
     "hint": "點擊地圖上的各個區域或攤位以查看詳細時程表、說明和連結。",
+    "tapHintBooth": "點擊以顯示詳情與連結",
+    "tapHintZone": "點擊以查看活動時程",
     "legend": {
       "title": "地圖圖例",
       "stage": "主舞台",

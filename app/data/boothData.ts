@@ -1,9 +1,6 @@
 import boothsJson from "../content/booths.json";
 
-export interface LocalizedText {
-  zh: string;
-  en: string;
-}
+import type { LocalizedText } from "~/types/content";
 
 export interface SocialLink {
   label: string;

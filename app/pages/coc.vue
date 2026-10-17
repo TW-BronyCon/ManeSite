@@ -3,8 +3,6 @@ import { computed } from "vue";
 import { marked } from "marked";
 
 const { locale, t } = useI18n();
-const route = useRoute();
-const siteUrl = "https://twbronycon.org";
 
 definePageMeta({
   underDevelopment: false,
@@ -30,16 +28,9 @@ const renderedHtml = computed(() => {
   return marked.parse(rawContent);
 });
 
-useSeoMeta({
+usePageSeo({
   title: () => t("cocPage.title"),
-  ogTitle: () => t("cocPage.title"),
-  twitterTitle: () => t("cocPage.title"),
   description: () => t("cocPage.subtitle"),
-  ogDescription: () => t("cocPage.subtitle"),
-  twitterDescription: () => t("cocPage.subtitle"),
-  ogImage: `${siteUrl}/img/text-logo.avif`,
-  twitterImage: `${siteUrl}/img/text-logo.avif`,
-  ogUrl: computed(() => `${siteUrl}${route.path}`),
 });
 </script>
 
@@ -77,7 +68,7 @@ useSeoMeta({
   gap: 1.2rem;
   padding: 1.2rem 1.5rem;
   background: rgba(226, 184, 102, 0.08);
-  border: 1px solid rgba(226, 184, 102, 0.25);
+  border: 1px solid var(--color-antique-gold-border);
   border-radius: 0.8rem;
 }
 
@@ -100,13 +91,13 @@ useSeoMeta({
   color: var(--color-gold);
   margin-top: 0;
   margin-bottom: 1.2rem;
-  border-bottom: 1px solid rgba(226, 184, 102, 0.2);
+  border-bottom: 1px solid var(--color-antique-gold-border-subtle);
   padding-bottom: 0.5rem;
 }
 
 .coc-article :deep(h2) {
   font-size: 1.4rem;
-  color: #ffffff;
+  color: var(--color-text-light);
   margin-top: 1.8rem;
   margin-bottom: 1rem;
 }
@@ -121,7 +112,7 @@ useSeoMeta({
 .coc-article :deep(p) {
   font-size: 1rem;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-text-body);
   margin-bottom: 1rem;
 }
 
@@ -134,14 +125,14 @@ useSeoMeta({
 .coc-article :deep(li) {
   font-size: 0.98rem;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-text-body);
   margin-bottom: 0.4rem;
 }
 
 .coc-article :deep(hr) {
   border: none;
   height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--color-border-muted);
   margin: 2rem 0;
 }
 

@@ -5,8 +5,6 @@ import generatedCrew from "~/content/.generated-crew.json";
 
 const { t, locale } = useI18n();
 const isEn = computed(() => locale.value.startsWith("en"));
-const route = useRoute();
-const siteUrl = "https://twbronycon.org";
 
 definePageMeta({
   underDevelopment: false,
@@ -43,16 +41,9 @@ function getAvatarUrl(member: CrewMember): string {
   return "/img/default-avatar.avif";
 }
 
-useSeoMeta({
+usePageSeo({
   title: () => t("crewPage.title"),
-  ogTitle: () => t("crewPage.title"),
-  twitterTitle: () => t("crewPage.title"),
   description: () => t("crewPage.intro"),
-  ogDescription: () => t("crewPage.intro"),
-  twitterDescription: () => t("crewPage.intro"),
-  ogImage: `${siteUrl}/img/text-logo.avif`,
-  twitterImage: `${siteUrl}/img/text-logo.avif`,
-  ogUrl: computed(() => `${siteUrl}${route.path}`),
 });
 </script>
 
@@ -145,7 +136,7 @@ useSeoMeta({
     rgba(72, 38, 82, 0.5) 0%,
     rgba(20, 10, 30, 0.65) 100%
   );
-  border: 1px solid rgba(226, 184, 102, 0.2);
+  border: 1px solid var(--color-antique-gold-border-subtle);
   border-radius: 1.2rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
   text-align: center;
@@ -252,7 +243,7 @@ useSeoMeta({
   align-items: center;
   text-align: center;
   padding: 1.4rem 1rem 1.2rem;
-  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.35s var(--ease-pop);
 }
 
 .crew-member-card:hover {
@@ -282,7 +273,7 @@ useSeoMeta({
   height: 90px;
   border-radius: 50%;
   object-fit: cover;
-  background: #140a1e;
+  background: var(--color-bg-deep);
   display: block;
 }
 
@@ -295,7 +286,7 @@ useSeoMeta({
 .member-name {
   font-size: 0.96rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--color-text-light);
   line-height: 1.35;
   word-break: break-word;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);

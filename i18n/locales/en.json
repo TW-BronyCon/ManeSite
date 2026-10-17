@@ -195,6 +195,8 @@
   "venue": {
     "title": "Venue Map",
     "hint": "Tap a zone or booth on the map to view detailed schedule, description, and links.",
+    "tapHintBooth": "Click to show links & details",
+    "tapHintZone": "Click to view event timetable",
     "legend": {
       "title": "Map Legend",
       "stage": "Main Stage",

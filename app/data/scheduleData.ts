@@ -1,3 +1,5 @@
+import type { LocalizedText } from "~/types/content";
+
 export type EventType =
   | "entry"
   | "opening"
@@ -12,11 +14,6 @@ export type EventType =
   | "social"
   | "social-event"
   | "social-special";
-
-export interface LocalizedText {
-  zh: string;
-  en: string;
-}
 
 export interface Column {
   key: string;

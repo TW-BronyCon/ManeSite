@@ -23,6 +23,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Test content utilities
+        run: npm test
+
       - name: Check Formatting
         run: npm run format:check
 
