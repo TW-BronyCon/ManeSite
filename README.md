@@ -94,6 +94,20 @@ npm run i18n:check
 
 `npm test` uses Node's built-in test runner and Node 24 TypeScript stripping for the shared content utilities.
 
+## Dependency updates
+
+Renovate checks for updates monthly. Stable (`>=1.0.0`) minor and patch updates
+use GitHub PR auto-merge; major and pre-1.0 updates require manual merging.
+The TypeScript `<7.0.0` cap remains in place.
+
+GitHub's **Allow auto-merge** setting must remain enabled. The `main` ruleset
+requires **Typecheck, Format, and Build**, **Workers Builds: twbc-site**, and one
+approving review before merging. Eligible PRs still need that approval; this
+configuration does not bypass reviews. Merge commits are used to match the
+ruleset's allowed merge method.
+
+See [Renovate's automerge guide](https://docs.renovatebot.com/key-concepts/automerge/).
+
 ## Contributors
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for commit and branch guidelines.
